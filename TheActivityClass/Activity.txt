@@ -1,0 +1,32 @@
+1.  
+
+b. ActivityOne
+onCreate()
+onStart()
+onResume()
+  Activity Running
+  Button pressed to start ActivityTwo
+onPause()
+onStop()
+
+ActivityTwo
+onCreate()
+onStart()
+onResume()
+  Activity Running
+
+c.  ActivityTwo
+onPause()
+onStop()
+onDestroy()
+ActivityTwo Shut Down
+
+ActivityOne
+onRestart()
+
+
+
+
+
+
+
