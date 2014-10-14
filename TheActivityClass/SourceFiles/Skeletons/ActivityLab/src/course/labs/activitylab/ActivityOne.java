@@ -26,20 +26,17 @@ public class ActivityOne extends Activity {
 	// Create variables named
 	// mCreate, mRestart, mStart and mResume
 	// to count calls to onCreate(), onRestart(), onStart() and
-	// onResume(). These variables should not be defined as static.
-	
+	// onResume(). These variables should not be defined as static.	
 	private int mCreate;
 	private int mRestart;
 	private int mStart;
 	private int mResume;
-
 	// You will need to increment these variables' values when their
 	// corresponding lifecycle methods get called.
 
 	// TODO: Create variables for each of the TextViews
 	// named mTvCreate, mTvRestart, mTvStart, mTvResume.
-	// for displaying the current count of each counter variable
-	
+	// for displaying the current count of each counter variable	
 	private TextView mTvCreate;
 	private TextView mTvRestart;
 	private TextView mTvStart;
@@ -52,7 +49,11 @@ public class ActivityOne extends Activity {
 
 		// TODO: Assign the appropriate TextViews to the TextView variables
 		// Hint: Access the TextView by calling Activity's findViewById()
-		// textView1 = (TextView) findViewById(R.id.textView1);
+		// textView1 = (TextView) findViewById(R.id.textView1);		
+		mTvCreate = (TextView) findViewById(R.id.create);
+		mTvRestart = (TextView) findViewById(R.id.restart);
+		mTvStart = (TextView) findViewById(R.id.start);
+		mTvResume = (TextView) findViewById(R.id.resume);
 
 		Button launchActivityTwoButton = (Button) findViewById(R.id.bLaunchActivityTwo);
 		launchActivityTwoButton.setOnClickListener(new OnClickListener() {
@@ -65,10 +66,11 @@ public class ActivityOne extends Activity {
 
 				// Create an intent stating which Activity you would like to
 				// start
-				Intent intent = null;
+				//Intent intent = null;
+				Intent intent = new Intent(ActivityOne.this, ActivityTwo.class);
 
 				// Launch the Activity using the intent
-
+				startActivity(intent);
 			}
 		});
 

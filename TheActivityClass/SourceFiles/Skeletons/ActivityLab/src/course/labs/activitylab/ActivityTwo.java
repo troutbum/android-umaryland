@@ -25,31 +25,34 @@ public class ActivityTwo extends Activity {
 	// Create variables named 	
 	// mCreate, mRestart, mStart and mResume 	
 	// to count calls to onCreate(), onRestart(), onStart() and
-	// onResume(). These variables should not be defined as static.
-	
+	// onResume(). These variables should not be defined as static.	
+	private int mCreate;
+	private int mRestart;
+	private int mStart;
+	private int mResume;
 	// You will need to increment these variables' values when their
 	// corresponding lifecycle methods get called.
-	
-
-	
 	
 	// TODO: Create variables for each of the TextViews
 	// named  mTvCreate, mTvRestart, mTvStart, mTvResume.
 	// for displaying the current count of each counter variable
+	private TextView mTvCreate;
+	private TextView mTvRestart;
+	private TextView mTvStart;
+	private TextView mTvResume;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_two);
 
 		// TODO: Assign the appropriate TextViews to the TextView variables
 		// Hint: Access the TextView by calling Activity's findViewById()
 		// textView1 = (TextView) findViewById(R.id.textView1);
-
-
-		
-		
-		
+		mTvCreate = (TextView) findViewById(R.id.create);
+		mTvRestart = (TextView) findViewById(R.id.restart);
+		mTvStart = (TextView) findViewById(R.id.start);
+		mTvResume = (TextView) findViewById(R.id.resume);		
 		
 		Button closeButton = (Button) findViewById(R.id.bClose); 
 		closeButton.setOnClickListener(new OnClickListener() {
@@ -59,10 +62,9 @@ public class ActivityTwo extends Activity {
 
 				// TODO:
 				// This function closes Activity Two
-				// Hint: use Context's finish() method
-
-				
-			
+				// Hint: use Context's finish() method	
+				Activity thisActivity = (ActivityTwo) v.getContext();
+				thisActivity.finish();			
 			}
 		});
 
@@ -86,10 +88,9 @@ public class ActivityTwo extends Activity {
 		// TODO:
 		// Update the appropriate count variable
 		// Update the user interface via the displayCounts() method
-
-
-		
-		
+		mCreate = mCreate + 1;
+		displayCounts();
+	
 	}
 
 	// Lifecycle callback methods overrides
@@ -104,10 +105,9 @@ public class ActivityTwo extends Activity {
 		// TODO:
 		// Update the appropriate count variable
 		// Update the user interface
-
-
-		
-		
+		mStart = mStart + 1;
+		displayCounts();
+	
 	}
 
 	@Override
@@ -120,8 +120,8 @@ public class ActivityTwo extends Activity {
 		// TODO:
 		// Update the appropriate count variable
 		// Update the user interface
-
-
+		mResume = mResume + 1;
+		displayCounts();
 	
 	}
 
@@ -151,9 +151,8 @@ public class ActivityTwo extends Activity {
 		// TODO:
 		// Update the appropriate count variable
 		// Update the user interface
-
-
-	
+		mRestart = mRestart + 1;
+		displayCounts();	
 	
 	}
 
