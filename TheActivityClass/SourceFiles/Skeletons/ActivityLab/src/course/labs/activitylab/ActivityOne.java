@@ -95,7 +95,6 @@ public class ActivityOne extends Activity {
 		// Update the user interface via the displayCounts() method
 		mCreate = mCreate + 1;
 		displayCounts();
-
 	}
 
 	// Lifecycle callback overrides
@@ -112,7 +111,6 @@ public class ActivityOne extends Activity {
 		// Update the user interface
 		mStart = mStart + 1;
 		displayCounts();
-
 	}
 
 	@Override
@@ -127,7 +125,6 @@ public class ActivityOne extends Activity {
 		// Update the user interface
 		mResume = mResume + 1;
 		displayCounts();
-
 	}
 
 	@Override
@@ -158,7 +155,6 @@ public class ActivityOne extends Activity {
 		// Update the user interface
 		mRestart = mRestart + 1;
 		displayCounts();
-
 	}
 
 	@Override
@@ -177,7 +173,7 @@ public class ActivityOne extends Activity {
 		savedInstanceState.putInt(CREATE_KEY, mCreate);
 	    savedInstanceState.putInt(RESTART_KEY, mRestart);
 	    savedInstanceState.putInt(START_KEY, mStart);
-	    savedInstanceState.putInt(RESUME_KEY, mResume);
+	    savedInstanceState.putInt(RESUME_KEY, mResume);    
 	}
 
 	// Updates the displayed counters
