@@ -80,6 +80,10 @@ public class ActivityOne extends Activity {
 			// TODO:
 			// Restore value of counters from saved state
 			// Only need 4 lines of code, one for every count variable
+			mCreate = savedInstanceState.getInt(CREATE_KEY);
+			mRestart = savedInstanceState.getInt(RESTART_KEY);
+			mStart = savedInstanceState.getInt(START_KEY);
+			mResume = savedInstanceState.getInt(RESUME_KEY);
 
 		}
 
@@ -164,13 +168,16 @@ public class ActivityOne extends Activity {
 		// Emit LogCat message
 		Log.i(TAG, "Entered the onDestroy() method");
 	}
-
+	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		// TODO:
 		// Save state information with a collection of key-value pairs
 		// 4 lines of code, one for every count variable
-
+		savedInstanceState.putInt(CREATE_KEY, mCreate);
+	    savedInstanceState.putInt(RESTART_KEY, mRestart);
+	    savedInstanceState.putInt(START_KEY, mStart);
+	    savedInstanceState.putInt(RESUME_KEY, mResume);
 	}
 
 	// Updates the displayed counters
