@@ -111,11 +111,11 @@ public class ActivityLoaderActivity extends Activity {
 		// Check which request we're responding to
 		if (requestCode == GET_TEXT_REQUEST_CODE) {
 			// Make sure the request was successful
-			if (resultCode == RESULT_OK) {
+			if (resultCode == RESULT_OK) {			
 				// The user entered text.
 				// The Intent's data contains this text.
-				String userTyped = Intent.getStringExtra();
-				mUserTextView.setText(userTyped);
+				String userInput = data.getStringExtra("message");
+				mUserTextView.setText(userInput);
 
 			}
 		}
