@@ -93,13 +93,13 @@ public class ActivityLoaderActivity extends Activity {
 		PackageManager packageManager = getPackageManager();
 		List<ResolveInfo> activities = packageManager.queryIntentActivities(baseIntent, 0);
 		boolean isIntentSafe = activities.size() > 0;
-
+/*
 		// Start an activity if it's safe
 		if (isIntentSafe) {
 		    startActivity(baseIntent);
 		}
 						
-		// TODO - Create a chooser intent, for choosing which Activity
+*/		// TODO - Create a chooser intent, for choosing which Activity
 		// will carry out the baseIntent
 		// (HINT: Use the Intent class' createChooser() method)
 		Intent chooserIntent = Intent.createChooser(baseIntent, CHOOSER_TEXT);     
