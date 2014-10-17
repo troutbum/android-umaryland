@@ -66,12 +66,12 @@ public class ActivityLoaderActivity extends Activity {
 		Log.i(TAG,"Entered startExplicitActivation()");
 		
 		// TODO - Create a new intent to launch the ExplicitlyLoadedActivity class
-		Intent explicitIntent = null;
-		
+		Intent explicitIntent = new Intent(ActivityLoaderActivity.this, 
+				ExplicitlyLoadedActivity.class);
+
 		// TODO - Start an Activity using that intent and the request code defined above
-		
-        
-        
+		startActivityForResult(explicitIntent, GET_TEXT_REQUEST_CODE);
+               
 	}
     
 	// Start a Browser Activity to view a web page or its URL
@@ -101,17 +101,23 @@ public class ActivityLoaderActivity extends Activity {
     
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        
+
 		Log.i(TAG, "Entered onActivityResult()");
-		
+
 		// TODO - Process the result only if this method received both a
 		// RESULT_OK result code and a recognized request code
 		// If so, update the Textview showing the user-entered text.
 
-	
-    
-    
-    
-    
-    }
+		// Check which request we're responding to
+		if (requestCode == GET_TEXT_REQUEST_CODE) {
+			// Make sure the request was successful
+			if (resultCode == RESULT_OK) {
+				// The user entered text.
+				// The Intent's data contains this text.
+				String userTyped = Intent.getStringExtra();
+				mUserTextView.setText(userTyped);
+
+			}
+		}
+	}
 }
