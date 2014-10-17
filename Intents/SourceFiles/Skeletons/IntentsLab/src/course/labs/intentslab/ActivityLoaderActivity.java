@@ -1,7 +1,11 @@
 package course.labs.intentslab;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,22 +85,33 @@ public class ActivityLoaderActivity extends Activity {
 		Log.i(TAG, "Entered startImplicitActivation()");
         
 		// TODO - Create a base intent for viewing a URL
-		// (HINT:  second parameter uses Uri.parse())
-		
-        Intent baseIntent = null;
-		
+		// (HINT:  second parameter uses Uri.parse())		
+		Uri webpage = Uri.parse(URL);
+		Intent baseIntent = new Intent(Intent.ACTION_VIEW, webpage);
+	
+		// Verify it resolves
+		PackageManager packageManager = getPackageManager();
+		List<ResolveInfo> activities = packageManager.queryIntentActivities(baseIntent, 0);
+		boolean isIntentSafe = activities.size() > 0;
+
+		// Start an activity if it's safe
+		if (isIntentSafe) {
+		    startActivity(baseIntent);
+		}
+						
 		// TODO - Create a chooser intent, for choosing which Activity
 		// will carry out the baseIntent
 		// (HINT: Use the Intent class' createChooser() method)
-		Intent chooserIntent = null;
-        
+		Intent chooserIntent = Intent.createChooser(baseIntent, CHOOSER_TEXT);     
         
 		Log.i(TAG,"Chooser Intent Action:" + chooserIntent.getAction());
-        
-        
+              
 		// TODO - Start the chooser Activity, using the chooser intent
-
-        
+		// Verify the intent will resolve to at least one activity
+		if (baseIntent.resolveActivity(getPackageManager()) != null) {
+		    startActivity(chooserIntent);
+		}
+		
 	}
     
 	@Override
