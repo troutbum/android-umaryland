@@ -1,6 +1,7 @@
 package course.labs.fragmentslab;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,9 +27,26 @@ public class MainActivity extends Activity implements
 			mFriendsFragment = new FriendsFragment();
 
 			//TODO 1 - add the FriendsFragment to the fragment_container
+			// fragment_container ID is in res/layout for phone screens
 			
+			// Get a reference to the FragmentManager
+			FragmentManager fragmentManager = getFragmentManager();
 			
+			// Begin a new FragmentTransaction
+			FragmentTransaction fragmentTransaction = fragmentManager 
+					.beginTransaction();
 			
+			// Add the FriendsFragment
+			fragmentTransaction.add(R.id.fragment_container, mFriendsFragment);	
+			fragmentTransaction.commit();
+			
+//			// Add a OnBackStackChangedListener to reset the layout when the back stack changes
+//			fragmentManager
+//					.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//						public void onBackStackChanged() {
+//							setLayout();
+//						}
+//					});
 
 		} else {
 
@@ -41,7 +59,11 @@ public class MainActivity extends Activity implements
 	}
 
 	// If there is no fragment_container ID, then the application is in
-	// two-pane mode
+	// two-pane mode i.e. tablet-size screen
+	//
+	// see main_activity.xml files in res/layout or res/layout-large (for tablets)
+	// the res/layout used for phones does have fragment_container ID
+	// that indicates this is 
 
 	private boolean isInTwoPaneMode() {
 
@@ -65,9 +87,16 @@ public class MainActivity extends Activity implements
 		if (!isInTwoPaneMode()) {
 
 			//TODO 2 - replace the fragment_container with the FeedFragment
-			
 
+			// Begin a new FragmentTransaction			
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager 
+					.beginTransaction();
+			fragmentTransaction.add(R.id.fragment_container, mFeedFragment);
 			
+			// Add this FragmentTransaction to the backstack
+			fragmentTransaction.addToBackStack(null);			
+			fragmentTransaction.commit();
 
 			// execute transaction now
 			getFragmentManager().executePendingTransactions();
