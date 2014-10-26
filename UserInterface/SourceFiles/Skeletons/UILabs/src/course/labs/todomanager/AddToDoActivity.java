@@ -118,16 +118,17 @@ public class AddToDoActivity extends Activity {
 			public void onClick(View v) {
 				Log.i(TAG, "Entered submitButton.OnClickListener.onClick()");
 
-				// gather ToDoItem data
+				// gather ToDoItem data				
+				ToDoItem mToDoItem = ToDoItem();
 
 				// TODO - Get the current Priority
-				Priority priority = null;
+				Priority priority = mToDoItem.getPriority();
 
 				// TODO - Get the current Status
-				Status status = null;
+				Status status = mToDoItem.getStatus();
 
 				// TODO - Get the current ToDoItem Title
-				String titleString = null;
+				String titleString = mToDoItem.getTitle();
 
 				// Construct the Date string
 				String fullDate = dateString + " " + timeString;
