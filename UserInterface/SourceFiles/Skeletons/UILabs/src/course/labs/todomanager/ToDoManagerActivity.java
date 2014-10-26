@@ -47,15 +47,16 @@ public class ToDoManagerActivity extends ListActivity {
 		getListView().setFooterDividersEnabled(true);
 
 		// TODO - Inflate footerView for footer_view.xml file
-
-		TextView footerView = null;
+//		TextView footerView = null;
+		View footerView = getLayoutInflater().inflate(R.layout.footer_view, null);
 
 		// NOTE: You can remove this block once you've implemented the assignment
-		if (null == footerView) {
-			return;
-		}
-		// TODO - Add footerView to ListView
-
+//		if (null == footerView) {
+//			return;
+//		}
+		// TODO - Add footerView to ListView		
+		getListView().addFooterView(footerView);
+		
 		
 		footerView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -68,7 +69,7 @@ public class ToDoManagerActivity extends ListActivity {
 		});
 
 		// TODO - Attach the adapter to this ListActivity's ListView
-		
+		setListAdapter(mAdapter);
 	}
 
 	@Override
