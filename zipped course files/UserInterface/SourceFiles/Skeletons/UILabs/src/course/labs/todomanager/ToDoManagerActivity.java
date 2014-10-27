@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 import course.labs.todomanager.ToDoItem.Priority;
 import course.labs.todomanager.ToDoItem.Status;
 
@@ -46,15 +47,15 @@ public class ToDoManagerActivity extends ListActivity {
 		getListView().setFooterDividersEnabled(true);
 
 		// TODO - Inflate footerView for footer_view.xml file
-		View footerView = getLayoutInflater().inflate(R.layout.footer_view, null);
 
-//		// NOTE: You can remove this block once you've implemented the assignment
-//		if (null == footerView) {
-//			return;
-//		}
-		
-		// TODO - Add footerView to ListView		
-		getListView().addFooterView(footerView);		
+		TextView footerView = null;
+
+		// NOTE: You can remove this block once you've implemented the assignment
+		if (null == footerView) {
+			return;
+		}
+		// TODO - Add footerView to ListView
+
 		
 		footerView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -63,17 +64,11 @@ public class ToDoManagerActivity extends ListActivity {
 				Log.i(TAG,"Entered footerView.OnClickListener.onClick()");
 
 				//TODO - Implement OnClick().
-				// Created a new intent to launch the AddToDoActivity class				
-				Intent explicitIntent = new Intent(ToDoManagerActivity.this, 
-						AddToDoActivity.class);
-				startActivityForResult(explicitIntent, ADD_TODO_ITEM_REQUEST);
-				
 			}
 		});
 
 		// TODO - Attach the adapter to this ListActivity's ListView
-		// "for a ListActivity, you have the advantage of binding the adapter directly"
-		setListAdapter(mAdapter);
+		
 	}
 
 	@Override
@@ -85,16 +80,6 @@ public class ToDoManagerActivity extends ListActivity {
 		// if user submitted a new ToDoItem
 		// Create a new ToDoItem from the data Intent
 		// and then add it to the adapter
-		if (requestCode == ADD_TODO_ITEM_REQUEST) {
-			// Make sure the request was successful
-			if (resultCode == RESULT_OK) {			
-				// The Intent's data contains this ToDoItem.
-				ToDoItem item=new ToDoItem(data);
-	        	Log.i(TAG, item.toLog());
-	        	mAdapter.add(item);
-	        	getListView();
-			}
-		}
 
 	}
 

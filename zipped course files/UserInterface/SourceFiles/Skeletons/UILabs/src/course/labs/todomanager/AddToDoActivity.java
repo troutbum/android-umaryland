@@ -118,30 +118,17 @@ public class AddToDoActivity extends Activity {
 			public void onClick(View v) {
 				Log.i(TAG, "Entered submitButton.OnClickListener.onClick()");
 
-				// gather ToDoItem data				
+				// gather ToDoItem data
 
-//				Don't need this code since helper methods below.
-//				// get the user text input
-//				// String userTitleTxt = mTitleText.getText().toString();
-//				
-//				// get selected radio button from Priority radioGroup
-//				// find the radio button by returned id
-//				int selectedId = mStatusRadioGroup.getCheckedRadioButtonId();			
-//		        mDefaultStatusButton = (RadioButton) findViewById(selectedId);
-//		        String userStatusTxt = mDefaultStatusButton.getText().toString();
-				
 				// TODO - Get the current Priority
-				//Priority priority = mToDoItem.getPriority();
-				Priority priority = getPriority();
+				Priority priority = null;
 
 				// TODO - Get the current Status
-				//Status status = mToDoItem.getStatus();
-				Status status = getStatus();
+				Status status = null;
 
 				// TODO - Get the current ToDoItem Title
-				//String titleString = mToDoItem.getTitle();		
-				String titleString = getToDoTitle();
-				
+				String titleString = null;
+
 				// Construct the Date string
 				String fullDate = dateString + " " + timeString;
 
@@ -151,8 +138,6 @@ public class AddToDoActivity extends Activity {
 						fullDate);
 
 				// TODO - return data Intent and finish
-				setResult(RESULT_OK, data);
-				finish();
 
 			}
 		});
