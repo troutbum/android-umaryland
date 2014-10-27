@@ -5,8 +5,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -84,23 +86,47 @@ public class ToDoListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		// TODO - Get the current ToDoItem
-		final ToDoItem toDoItem = null;
+		final ToDoItem item = (ToDoItem) getItem(position);
 
-		// TODO - Inflate the View for this ToDoItem
-		// from todo_item.xml
-		RelativeLayout itemLayout = null;
-
-		// TODO - Fill in specific ToDoItem data
-		// Remember that the data that goes in this View
-		// corresponds to the user interface elements defined
-		// in the layout file
-
+		// getView is called automatically when the ListView wants to display
+	    // itself, once for each ToDoItem on the screen.
+	    //
+	    // convertView contains a recycled inflated item view from. We have this
+	    // because all items use the same layout, i.e. R.layout.todo_item, so
+	    // Android saves a lot of processing by recycling the items.
+	    // The only differences between them are the data values, 
+		// which you fill in below.
+	    //
+	    // If the convertView parameter is null, it needs to be updated with our layout.
+		if (convertView == null) {
+	           LayoutInflater li = (LayoutInflater) parent.getContext().
+			getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = (RelativeLayout) li.inflate(R.layout.todo_item, parent,false);
+	       }
+			
+//		// TODO - Inflate the View for this ToDoItem
+//		// from todo_item.xml
+//		//RelativeLayout itemLayout = null;
+//			
+//		//RelativeLayout itemLayout = getLayoutInflater().inflate(R.layout.todo_item, null);
+//		//item.addView(itemLayout);
+//		
+//		// TODO - Fill in specific ToDoItem data
+//		// Remember that the data that goes in this View
+//		// corresponds to the user interface elements defined
+//		// in the layout file
+		
 		// TODO - Display Title in TextView
-		final TextView titleView = null;
+		//final TextView titleView = null;
+		final TextView titleView = (TextView) convertView.findViewById(R.id.titleView);
+		titleView.setText(item.getTitle());
 
 		// TODO - Set up Status CheckBox
-		final CheckBox statusView = null;
-
+		//final CheckBox statusView = null;
+		final CheckBox statusView = (CheckBox) convertView.findViewById(R.id.statusCheckBox);
+		statusView.setChecked((item.getStatus() == 
+								course.labs.todomanager.ToDoItem.Status.DONE));
+			
 		statusView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
@@ -114,17 +140,20 @@ public class ToDoListAdapter extends BaseAdapter {
 		});
 
 		// TODO - Display Priority in a TextView
-
-		final TextView priorityView = null;
+		//final TextView priorityView = null;
+		final TextView priorityView = (TextView) convertView.findViewById(R.id.priorityView);
+		priorityView.setText(item.getPriority().toString());
 
 		// TODO - Display Time and Date.
 		// Hint - use ToDoItem.FORMAT.format(toDoItem.getDate()) to get date and
 		// time String
-
-		final TextView dateView = null;
+		//final TextView dateView = null;
+		final TextView dateView = (TextView) convertView.findViewById(R.id.dateView);
+		dateView.setText(item.FORMAT.format(item.getDate()));
 
 		// Return the View you just created
-		return itemLayout;
+		//return itemLayout;
+		return convertView;
 
 	}
 }

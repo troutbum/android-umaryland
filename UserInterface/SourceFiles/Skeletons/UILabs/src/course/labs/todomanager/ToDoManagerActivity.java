@@ -89,7 +89,7 @@ public class ToDoManagerActivity extends ListActivity {
 			// Make sure the request was successful
 			if (resultCode == RESULT_OK) {			
 				// The Intent's data contains this ToDoItem.
-				ToDoItem item=new ToDoItem(data);
+				ToDoItem item = new ToDoItem(data);
 	        	Log.i(TAG, item.toLog());
 	        	mAdapter.add(item);
 	        	getListView();
