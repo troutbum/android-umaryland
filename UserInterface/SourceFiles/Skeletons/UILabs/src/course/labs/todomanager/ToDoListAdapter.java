@@ -85,9 +85,6 @@ public class ToDoListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		// TODO - Get the current ToDoItem
-		final ToDoItem item = (ToDoItem) getItem(position);
-
 		// getView is called automatically when the ListView wants to display
 	    // itself, once for each ToDoItem on the screen.
 	    //
@@ -96,21 +93,22 @@ public class ToDoListAdapter extends BaseAdapter {
 	    // Android saves a lot of processing by recycling the items.
 	    // The only differences between them are the data values, 
 		// which you fill in below.
-	    //
-	    // If the convertView parameter is null, it needs to be updated with our layout.
+
+		// TODO - Get the current ToDoItem
+		final ToDoItem item = (ToDoItem) getItem(position);
+  
+		// TODO - Inflate the View for this ToDoItem
+		// If the convertView parameter is null, it needs to be updated with our layout.
 		if (convertView == null) {
-	           LayoutInflater li = (LayoutInflater) parent.getContext().
-			getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = (RelativeLayout) li.inflate(R.layout.todo_item, parent,false);
-	       }
-			
-//		// TODO - Inflate the View for this ToDoItem
-//		// from todo_item.xml
-//		//RelativeLayout itemLayout = null;
+			LayoutInflater mInflater = LayoutInflater.from(mContext);
+			convertView = mInflater.inflate(R.layout.todo_item, parent, false);
 //			
-//		//RelativeLayout itemLayout = getLayoutInflater().inflate(R.layout.todo_item, null);
-//		//item.addView(itemLayout);
-//		
+//			Simpler to use above:
+//			LayoutInflater li = (LayoutInflater) parent.getContext().
+//								getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//			convertView = (RelativeLayout) li.inflate(R.layout.todo_item, parent,false);
+		}
+					
 //		// TODO - Fill in specific ToDoItem data
 //		// Remember that the data that goes in this View
 //		// corresponds to the user interface elements defined
@@ -124,20 +122,39 @@ public class ToDoListAdapter extends BaseAdapter {
 		// TODO - Set up Status CheckBox
 		//final CheckBox statusView = null;
 		final CheckBox statusView = (CheckBox) convertView.findViewById(R.id.statusCheckBox);
+		
+		// Display Checkmark on View if the Item object's Status property == DONE
 		statusView.setChecked((item.getStatus() == 
 								course.labs.todomanager.ToDoItem.Status.DONE));
-			
+		
+		// 
 		statusView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				Log.i(TAG, "Entered onCheckedChanged()");
 
-				// TODO - set up an OnCheckedChangeListener, which
-				// is called when the user toggles the status checkbox
+//				// TODO - set up an OnCheckedChangeListener, which
+//				// is called when the user toggles the status checkbox
+//
+//				if(isChecked) {
+//					if(buttonView==R.id.statusDone) {
+//						showTextNotification("Done");
+//					}
+//
+//					if(buttonView==statusNotDone) {
+//						showTextNotification("Not Done");
+//					}	
+//
+//					if(isChecked) {
+//						if(statusView.isChecked() == TRUE) {
+//							S
+//						}
+//					}
+//
+				}
 
-			}
-		});
+			});
 
 		// TODO - Display Priority in a TextView
 		//final TextView priorityView = null;
