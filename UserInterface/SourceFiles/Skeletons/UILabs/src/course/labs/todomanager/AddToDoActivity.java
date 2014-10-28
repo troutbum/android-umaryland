@@ -107,7 +107,11 @@ public class AddToDoActivity extends Activity {
 				Log.i(TAG, "Entered resetButton.OnClickListener.onClick()");
 
 				// TODO - Reset data to default values
-
+				setDefaultDateTime();
+				mTitleText.setText("");
+				mDefaultStatusButton.setChecked(true);
+				mDefaultPriorityButton.setChecked(true);
+						
 			}
 		});
 
@@ -120,27 +124,14 @@ public class AddToDoActivity extends Activity {
 				Log.i(TAG, "Entered submitButton.OnClickListener.onClick()");
 
 				// gather ToDoItem data				
-
-//				Don't need this code since helper methods below.
-//				// get the user text input
-//				// String userTitleTxt = mTitleText.getText().toString();
-//				
-//				// get selected radio button from Priority radioGroup
-//				// find the radio button by returned id
-//				int selectedId = mStatusRadioGroup.getCheckedRadioButtonId();			
-//		        mDefaultStatusButton = (RadioButton) findViewById(selectedId);
-//		        String userStatusTxt = mDefaultStatusButton.getText().toString();
 				
 				// TODO - Get the current Priority
-				//Priority priority = mToDoItem.getPriority();
 				Priority priority = getPriority();
 
 				// TODO - Get the current Status
-				//Status status = mToDoItem.getStatus();
 				Status status = getStatus();
 
-				// TODO - Get the current ToDoItem Title
-				//String titleString = mToDoItem.getTitle();		
+				// TODO - Get the current ToDoItem Title (user input for Item)	
 				String titleString = getToDoTitle();
 				
 				// Construct the Date string

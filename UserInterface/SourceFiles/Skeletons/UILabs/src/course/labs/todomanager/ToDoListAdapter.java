@@ -3,6 +3,7 @@ package course.labs.todomanager;
 import java.util.ArrayList;
 import java.util.List;
 
+import course.labs.todomanager.ToDoItem.Status;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,12 +116,10 @@ public class ToDoListAdapter extends BaseAdapter {
 //		// in the layout file
 		
 		// TODO - Display Title in TextView
-		//final TextView titleView = null;
 		final TextView titleView = (TextView) convertView.findViewById(R.id.titleView);
 		titleView.setText(item.getTitle());
 
 		// TODO - Set up Status CheckBox
-		//final CheckBox statusView = null;
 		final CheckBox statusView = (CheckBox) convertView.findViewById(R.id.statusCheckBox);
 		
 		// Display Checkmark on View if the Item object's Status property == DONE
@@ -134,27 +133,18 @@ public class ToDoListAdapter extends BaseAdapter {
 					boolean isChecked) {
 				Log.i(TAG, "Entered onCheckedChanged()");
 
-//				// TODO - set up an OnCheckedChangeListener, which
-//				// is called when the user toggles the status checkbox
-//
-//				if(isChecked) {
-//					if(buttonView==R.id.statusDone) {
-//						showTextNotification("Done");
-//					}
-//
-//					if(buttonView==statusNotDone) {
-//						showTextNotification("Not Done");
-//					}	
-//
-//					if(isChecked) {
-//						if(statusView.isChecked() == TRUE) {
-//							S
-//						}
-//					}
-//
+				if(isChecked) {
+					item.setStatus(Status.DONE);
+					Log.i(TAG, "onCheckedChanged() Status is DONE");
+				}
+				else {
+					item.setStatus(Status.NOTDONE);
+					Log.i(TAG, "onCheckedChanged() Status is NOT DONE");
 				}
 
-			});
+			}
+
+		});
 
 		// TODO - Display Priority in a TextView
 		//final TextView priorityView = null;
