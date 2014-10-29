@@ -1,15 +1,21 @@
 package com.example.modernartui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	private static final int DIALOG_ALERT = 10;
 	private SeekBar volumeControl = null;
 	
 	@Override
@@ -74,8 +80,52 @@ public class MainActivity extends Activity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			showDialog(DIALOG_ALERT);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	// adjust this method if you have more than 
+	// one button pointing to this method
+//	public void onClick(View view) {
+//	  showDialog(DIALOG_ALERT);
+//	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+	  switch (id) {
+	    case DIALOG_ALERT:
+	      Builder builder = new AlertDialog.Builder(this);
+	      builder.setMessage("Inspired by the works of artists such as \n"
+	      		+ " \n"
+	      		+ "Piet Mondrian and Paul Klee \n"
+	      		+ " \n "
+	      		+ "Click below to learn more!"
+	      		+ " \n ");
+
+	      builder.setCancelable(true);
+	      builder.setPositiveButton("Visit MOMA", new OkOnClickListener());
+	      builder.setNegativeButton("Not Now", new CancelOnClickListener());
+	      AlertDialog dialog = builder.create();
+	      dialog.show();
+	  }
+	  return super.onCreateDialog(id);
+	}
+
+	private final class CancelOnClickListener implements
+	    DialogInterface.OnClickListener {
+	  public void onClick(DialogInterface dialog, int which) {
+	    Toast.makeText(getApplicationContext(), "Cancel selected, activity continues",
+	        Toast.LENGTH_LONG).show();
+	  }
+	}
+
+	private final class OkOnClickListener implements
+	    DialogInterface.OnClickListener {
+	  public void onClick(DialogInterface dialog, int which) {
+	    MainActivity.this.finish();
+	  }
+	} 
+	
 }
