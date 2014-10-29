@@ -30,9 +30,10 @@ public class MainActivity extends Activity {
 		final Button button4 = (Button) findViewById(R.id.button4);
 		final Button button5 = (Button) findViewById(R.id.button5);
 		
-		final int color1 = 0xFFFF0000;  // 0xAARRGGBB
-		final int color2 = 0xFF00FF00;
-		final int color3 = 0xFF0000FF;
+		// starting colors of buttons
+		final int color1 = 0xFFFF4040;  // 0xAARRGGBB
+		final int color2 = 0xFF40FF40;
+		final int color3 = 0xFF4040FF;
 		final int color4 = 0xFFD3D3D3;
 		final int color5 = 0xFF000000;
 		
@@ -42,8 +43,11 @@ public class MainActivity extends Activity {
 		button4.setBackgroundColor(color4); // 0xAARRGGBB
 		button5.setBackgroundColor(color5); // 0xAARRGGBB
 		
+		
+		// Get a reference to the Seek Bar
 		volumeControl = (SeekBar) findViewById(R.id.seekBar1);
 
+		// implement Seek Bar method to change colors
 		volumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			int progressChanged = 0;
 
@@ -116,7 +120,7 @@ public class MainActivity extends Activity {
 	private final class CancelOnClickListener implements
 	    DialogInterface.OnClickListener {
 	  public void onClick(DialogInterface dialog, int which) {
-	    Toast.makeText(getApplicationContext(), "Cancel selected, activity continues",
+	    Toast.makeText(getApplicationContext(), "Visit Soon!",
 	        Toast.LENGTH_LONG).show();
 	  }
 	}
