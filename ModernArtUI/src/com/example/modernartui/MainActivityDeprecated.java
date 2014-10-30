@@ -6,6 +6,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -13,7 +14,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivityDeprecated extends Activity {
 
 	private static final int DIALOG_ALERT = 10;
 	private SeekBar volumeControl = null;
@@ -60,11 +61,11 @@ public class MainActivity extends Activity {
 			}
 
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				button1.setBackgroundColor(color1 - progressChanged);
+				button1.setBackgroundColor(color1 - progressChanged*1000);
 				button2.setBackgroundColor(color2 - progressChanged*1000);
 				button3.setBackgroundColor(color3 - progressChanged*100);
 				button4.setBackgroundColor(color4 - progressChanged*100);
-				button5.setBackgroundColor(color5 + progressChanged*100);
+				button5.setBackgroundColor(color5 + progressChanged*1000);
 			}
 		});			
 		
@@ -92,6 +93,7 @@ public class MainActivity extends Activity {
 	
 	// adjust this method if you have more than 
 	// one button pointing to this method
+	
 //	public void onClick(View view) {
 //	  showDialog(DIALOG_ALERT);
 //	}
@@ -101,12 +103,12 @@ public class MainActivity extends Activity {
 	  switch (id) {
 	    case DIALOG_ALERT:
 	      Builder builder = new AlertDialog.Builder(this);
-	      builder.setMessage("Inspired by the works of artists such as \n"
-	      		+ " \n"
+	      builder.setMessage("Inspired by artists\n"
+	      		+ "\n"
 	      		+ "Piet Mondrian and Paul Klee \n"
-	      		+ " \n "
+	      		+ "\n "
 	      		+ "Click below to learn more!"
-	      		+ " \n ");
+	      		+ "\n ");
 
 	      builder.setCancelable(true);
 	      builder.setPositiveButton("Visit MOMA", new OkOnClickListener());
@@ -120,7 +122,7 @@ public class MainActivity extends Activity {
 	private final class CancelOnClickListener implements
 	    DialogInterface.OnClickListener {
 	  public void onClick(DialogInterface dialog, int which) {
-	    Toast.makeText(getApplicationContext(), "Visit Soon!",
+	    Toast.makeText(getApplicationContext(), "Come Visit Soon!",
 	        Toast.LENGTH_LONG).show();
 	  }
 	}
@@ -128,7 +130,7 @@ public class MainActivity extends Activity {
 	private final class OkOnClickListener implements
 	    DialogInterface.OnClickListener {
 	  public void onClick(DialogInterface dialog, int which) {
-	    MainActivity.this.finish();
+	    MainActivityDeprecated.this.finish();
 	  }
 	} 
 	
