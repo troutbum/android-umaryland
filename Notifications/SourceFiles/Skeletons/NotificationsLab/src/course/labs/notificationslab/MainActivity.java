@@ -28,9 +28,9 @@ public class MainActivity extends Activity implements SelectionListener {
 			"ladygaga" };
 	public static final int IS_ALIVE = Activity.RESULT_FIRST_USER;
 	public static final String DATA_REFRESHED_ACTION = "course.labs.notificationslab.DATA_REFRESHED";
-	
+
 	private static final int NUM_FRIENDS = 3;
-	
+
 	// Actual URLs are unused in this offline version of the app
 	private static final String URL_TSWIFT = "https://d396qusza40orc.cloudfront.net/android%2FLabs%2FUserNotifications%2Ftaylorswift.txt";
 	private static final String URL_RBLACK = "https://d396qusza40orc.cloudfront.net/android%2FLabs%2FUserNotifications%2Frebeccablack.txt";
@@ -38,7 +38,6 @@ public class MainActivity extends Activity implements SelectionListener {
 	private static final String TAG = "Lab-Notifications";
 	private static final long TWO_MIN = 2 * 60 * 1000;
 	private static final int UNSELECTED = -1;
-
 
 	private FragmentManager mFragmentManager;
 	private FriendsFragment mFriendsFragment;
@@ -55,17 +54,18 @@ public class MainActivity extends Activity implements SelectionListener {
 		setContentView(R.layout.activity_main);
 
 		mFragmentManager = getFragmentManager();
-		addFriendsFragment();
+		addFriendsFragment(); // create UI - fragment using ListAdapter
 
 		// The feed is fresh if it was downloaded less than 2 minutes ago
 		mIsFresh = (System.currentTimeMillis() - getFileStreamPath(
 				TWEET_FILENAME).lastModified()) < TWO_MIN;
 
-		ensureData();
+		ensureData(); // grabs "feeds" from file
 
 	}
 
 	// Add Friends Fragment to Activity
+	// This is the main UI screen of this App
 	private void addFriendsFragment() {
 
 		mFriendsFragment = new FriendsFragment();
@@ -89,13 +89,18 @@ public class MainActivity extends Activity implements SelectionListener {
 			// Show a Toast Notification to inform user that 
 			// the app is "Downloading Tweets from Network"
 			Log.i (TAG,"Issuing Toast Message");
-
-
 			
+			Toast.makeText(getBaseContext(), "Downloading Tweets from Network",
+			        Toast.LENGTH_LONG).show();
 			
-
+			// Construct & Execute AsyncTask to "download" feeds
+			// see http://developer.android.com/reference/android/os/AsyncTask.html
+			// 
+			//   AsyncTask enables proper and easy use of the UI thread. 
+			//   This class allows to perform background operations and publish 
+			//   results on the UI thread without having to manipulate threads and/or handlers.
+			
 			new DownloaderTask(this).execute(URL_TSWIFT, URL_RBLACK, URL_LGAGA);
-
 			
 			// Set up a BroadcastReceiver to receive an Intent when download
 			// finishes. 
@@ -109,10 +114,13 @@ public class MainActivity extends Activity implements SelectionListener {
 					// Check to make sure this is an ordered broadcast
 					// Let sender know that the Intent was received
 					// by setting result code to MainActivity.IS_ALIVE
-
 					
+					if (isOrderedBroadcast()) {
+						Log.i(TAG, "This is an ordered broadcast");
+						abortBroadcast();
+					}	
 
-
+					//MainActivity.IS_ALIVE
 					
 				}
 			};
@@ -126,7 +134,7 @@ public class MainActivity extends Activity implements SelectionListener {
 		}
 	}
 
-	// Called when new Tweets have been downloaded 
+	// Called when new Tweets have been downloaded
 	public void setRefreshed(String[] feeds) {
 
 		mRawFeeds[0] = feeds[0];
@@ -151,9 +159,9 @@ public class MainActivity extends Activity implements SelectionListener {
 		}
 	}
 
-	// Calls FeedFragement.update, passing in the 
+	// Calls FeedFragement.update, passing in the
 	// the tweets for the currently selected friend
- 
+
 	void updateFeed() {
 
 		if (null != mFeedFragment)
@@ -184,12 +192,9 @@ public class MainActivity extends Activity implements SelectionListener {
 		super.onResume();
 
 		// TODO:
-		// Register the BroadcastReceiver to receive a 
+		// Register the BroadcastReceiver to receive a
 		// DATA_REFRESHED_ACTION broadcast
 
-		
-		
-		
 	}
 
 	@Override
@@ -197,13 +202,10 @@ public class MainActivity extends Activity implements SelectionListener {
 
 		// TODO:
 		// Unregister the BroadcastReceiver if it has been registered
-        // Note: To work around a Robotium issue - check that the BroadcastReceiver
-        // is not null before you try to unregister it
-        
+		// Note: To work around a Robotium issue - check that the
+		// BroadcastReceiver
+		// is not null before you try to unregister it
 
-		
-		
-		
 		super.onPause();
 
 	}
