@@ -194,6 +194,9 @@ public class MainActivity extends Activity implements SelectionListener {
 		// TODO:
 		// Register the BroadcastReceiver to receive a
 		// DATA_REFRESHED_ACTION broadcast
+		IntentFilter intentFilter = new IntentFilter(DATA_REFRESHED_ACTION);
+		intentFilter.setPriority(3);
+		registerReceiver(mRefreshReceiver, intentFilter);
 
 	}
 
@@ -205,7 +208,10 @@ public class MainActivity extends Activity implements SelectionListener {
 		// Note: To work around a Robotium issue - check that the
 		// BroadcastReceiver
 		// is not null before you try to unregister it
-
+		if (mRefreshReceiver != null) {
+			unregisterReceiver(mRefreshReceiver);
+		}
+			
 		super.onPause();
 
 	}

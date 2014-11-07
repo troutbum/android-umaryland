@@ -153,7 +153,8 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 								"Entered result receiver's onReceive() method");
 
 						// TODO: Check whether the result code is not MainActivity.IS_ALIVE
-
+						// (MEANING TIME TO DO A NOTIFICATION)
+						
 						if (false || true) {
 
 							// TODO: If so, create a PendingIntent using the

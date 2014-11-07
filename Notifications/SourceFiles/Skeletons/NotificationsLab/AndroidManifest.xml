@@ -34,6 +34,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        <receiver android:name="MyPhoneReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" >
+                </action>
+            </intent-filter>
+        </receiver> 
+        <receiver
+            android:name=".Receiver2"
+            android:exported="false" >
+            <intent-filter android:priority="10" >
+                <action android:name="course.labs.notificationslab.DATA_REFRESHED" >
+                </action>
+            </intent-filter>
+        </receiver>      
+	</application>
 
 </manifest>
