@@ -21,7 +21,7 @@ import android.widget.RemoteViews;
 
 public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 
-	private static final int SIM_NETWORK_DELAY = 1000;
+	private static final int SIM_NETWORK_DELAY = 5000;  // 1000
 	private static final String TAG = "Lab-Notifications";
 	private final int MY_NOTIFICATION_ID = 11151990;
 	private String mFeeds[] = new String[3];
@@ -29,11 +29,10 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 	private Context mApplicationContext;
 	
 	// stuff I added:
-	private Intent mNotificationIntent;
 	private PendingIntent myContentIntent;
 	private int mNotificationCount;
-	private final CharSequence tickerText = "This is a Really, Really, Super Long Notification Message!";
-	private final CharSequence contentTitle = "Notification";
+	private final CharSequence tickerText = "Downloading Tweets";
+	private CharSequence contentTitle = " ";
 	private final CharSequence contentText = "You've Been Notified!";
 
 
@@ -128,7 +127,7 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 	private void notify(final boolean success) {
 		Log.i(TAG, "Entered notify()");
 
-		// this intent if NOTIFICATION BAR needs to be lit up 
+		// intent used if NOTIFICATION BAR needs to be lit up 
 		// if App is not running in foreground
 		final Intent restartMainActivtyIntent = new Intent(mApplicationContext,
 				MainActivity.class);
@@ -198,10 +197,20 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 							// reflect whether the download completed
 							// successfully
 
-							myContentView.setTextViewText(R.id.text, contentText + " ("
-									+ ++mNotificationCount + ")");
+//							myContentView.setTextViewText(R.id.text, contentText + " ("
+//									+ ++mNotificationCount + ")");
 
-							
+							if (success) {
+								myContentView.setTextViewText(R.id.text, successMsg);
+								contentTitle = successMsg;
+								Log.i(TAG,
+										"Reached custom notification:  setTextView = successMsg");
+							} 
+							else {
+								myContentView.setTextViewText(R.id.text, failMsg);
+								contentTitle = failMsg;
+							}
+
 							// TODO: Use the Notification.Builder class to
 							// create the Notification. You will have to set
 							// several pieces of information. You can use
@@ -214,12 +223,13 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 									.setTicker(tickerText)
 									.setSmallIcon(android.R.drawable.stat_sys_warning)
 									.setAutoCancel(true)
-									.setContentIntent(myContentIntent) // the custo
+									.setContentIntent(myContentIntent) // the custom intent is sent
 									.setContentTitle(contentTitle)
-									.setContentText(
-											contentText + " (" + ++mNotificationCount + ")");
-									//.setContentIntent(mContentIntent).setSound(soundURI)
-									//.setVibrate(mVibratePattern);
+									.setContent(myContentView);
+//									.setContentText(
+//											contentText + " (" + ++mNotificationCount + ")");
+//									//.setContentIntent(mContentIntent).setSound(soundURI)
+//									//.setVibrate(mVibratePattern);
 				
 							
 							
