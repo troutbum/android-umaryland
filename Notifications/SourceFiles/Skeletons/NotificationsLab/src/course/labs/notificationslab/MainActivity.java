@@ -102,9 +102,11 @@ public class MainActivity extends Activity implements SelectionListener {
 			
 			new DownloaderTask(this).execute(URL_TSWIFT, URL_RBLACK, URL_LGAGA);
 			
-			// Set up a BroadcastReceiver to receive an Intent when download
-			// finishes. 
+			
+			// Set up a BroadcastReceiver to receive an Intent when download finishes
+			//
 			mRefreshReceiver = new BroadcastReceiver() {
+				
 				@Override
 				public void onReceive(Context context, Intent intent) {
 
@@ -117,10 +119,16 @@ public class MainActivity extends Activity implements SelectionListener {
 					
 					if (isOrderedBroadcast()) {
 						Log.i(TAG, "This is an ordered broadcast");
-						abortBroadcast();
+						// abortBroadcast();  // use to kill further broadcast				
+						
+						// use get/setResultData
+						// when a BroadcastIntent wants a return code or data
+						//
+						// String tmp = getResultData() == null ? "" : getResultData();
+						// setResultData(tmp + ":Receiver 1:");
+					
+						setResultCode(MainActivity.IS_ALIVE);
 					}	
-
-					//MainActivity.IS_ALIVE
 					
 				}
 			};
@@ -195,7 +203,7 @@ public class MainActivity extends Activity implements SelectionListener {
 		// Register the BroadcastReceiver to receive a
 		// DATA_REFRESHED_ACTION broadcast
 		IntentFilter intentFilter = new IntentFilter(DATA_REFRESHED_ACTION);
-		intentFilter.setPriority(3);
+		intentFilter.setPriority(5);
 		registerReceiver(mRefreshReceiver, intentFilter);
 
 	}

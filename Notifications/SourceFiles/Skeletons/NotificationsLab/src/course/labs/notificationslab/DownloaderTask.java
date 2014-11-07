@@ -27,6 +27,15 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 	private String mFeeds[] = new String[3];
 	private MainActivity mParentActivity;
 	private Context mApplicationContext;
+	
+	// stuff I added:
+	private Intent mNotificationIntent;
+	private PendingIntent mContentIntent;
+	private int mNotificationCount;
+	private final CharSequence tickerText = "This is a Really, Really, Super Long Notification Message!";
+	private final CharSequence contentTitle = "Notification";
+	private final CharSequence contentText = "You've Been Notified!";
+
 
 	// Raw feed file IDs used in this offline version of the app
 	public static final int txtFeeds[] = { R.raw.tswift, R.raw.rblack,
@@ -153,17 +162,22 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 								"Entered result receiver's onReceive() method");
 
 						// TODO: Check whether the result code is not MainActivity.IS_ALIVE
-						// (MEANING TIME TO DO A NOTIFICATION)
-						
-						if (false || true) {
+						// i.e the App is not active, so send a NOTIFICATION)
+																
+						if (getResultCode() != MainActivity.IS_ALIVE) {	
 
 							// TODO: If so, create a PendingIntent using the
 							// restartMainActivityIntent and set its flags
 							// to FLAG_UPDATE_CURRENT
-
-
-
 							
+
+							//private Intent mNotificationIntent;
+							//private PendingIntent mContentIntent;
+							
+							Intent mNotificationIntent = new Intent(mApplicationContext.getApplicationContext(),
+									Notification.class);
+							PendingIntent mContentIntent = PendingIntent.getActivity(context, 0,
+									mNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 							
 
 							// Uses R.layout.custom_notification for the
@@ -189,14 +203,25 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 							// for the small icon. You should also
 							// setAutoCancel(true).
 
-
+							Notification.Builder notificationBuilder = new Notification.Builder(
+									mApplicationContext.getApplicationContext())
+									.setTicker(tickerText)
+									.setSmallIcon(android.R.drawable.stat_sys_warning)
+									.setAutoCancel(true)
+									.setContentTitle(contentTitle)
+									.setContentText(
+											contentText + " (" + ++mNotificationCount + ")");
+									//.setContentIntent(mContentIntent).setSound(soundURI)
+									//.setVibrate(mVibratePattern);
 
 							
 							
 							
 							
 							// TODO: Send the notification
-
+							NotificationManager mNotificationManager = (NotificationManager) mApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
+							mNotificationManager.notify(MY_NOTIFICATION_ID,
+									notificationBuilder.build());
 
 							
 							
