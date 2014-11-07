@@ -30,7 +30,7 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 	
 	// stuff I added:
 	private Intent mNotificationIntent;
-	private PendingIntent mContentIntent;
+	private PendingIntent myContentIntent;
 	private int mNotificationCount;
 	private final CharSequence tickerText = "This is a Really, Really, Super Long Notification Message!";
 	private final CharSequence contentTitle = "Notification";
@@ -128,6 +128,8 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 	private void notify(final boolean success) {
 		Log.i(TAG, "Entered notify()");
 
+		// this intent if NOTIFICATION BAR needs to be lit up 
+		// if App is not running in foreground
 		final Intent restartMainActivtyIntent = new Intent(mApplicationContext,
 				MainActivity.class);
 		restartMainActivtyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -166,25 +168,29 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 																
 						if (getResultCode() != MainActivity.IS_ALIVE) {	
 
+							Log.i(TAG,
+									"MainActivity is NOT ALIVE - Send Notification!");
+							
 							// TODO: If so, create a PendingIntent using the
 							// restartMainActivityIntent and set its flags
 							// to FLAG_UPDATE_CURRENT
 							
 
-							//private Intent mNotificationIntent;
-							//private PendingIntent mContentIntent;
+//							//private Intent mNotificationIntent;
+//							//private PendingIntent mContentIntent;
+//							
+//							Intent mNotificationIntent = new Intent(mApplicationContext.getApplicationContext(),
+//									Notification.class);
 							
-							Intent mNotificationIntent = new Intent(mApplicationContext.getApplicationContext(),
-									Notification.class);
-							PendingIntent mContentIntent = PendingIntent.getActivity(context, 0,
-									mNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+							myContentIntent = PendingIntent.getActivity(mApplicationContext.getApplicationContext(), 0,
+									restartMainActivtyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 							
 
 							// Uses R.layout.custom_notification for the
 							// layout of the notification View. The xml
 							// file is in res/layout/custom_notification.xml
 
-							RemoteViews mContentView = new RemoteViews(
+							RemoteViews myContentView = new RemoteViews(
 									mApplicationContext.getPackageName(),
 									R.layout.custom_notification);
 
@@ -192,10 +198,10 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 							// reflect whether the download completed
 							// successfully
 
-
+							myContentView.setTextViewText(R.id.text, contentText + " ("
+									+ ++mNotificationCount + ")");
 
 							
-
 							// TODO: Use the Notification.Builder class to
 							// create the Notification. You will have to set
 							// several pieces of information. You can use
@@ -208,22 +214,19 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 									.setTicker(tickerText)
 									.setSmallIcon(android.R.drawable.stat_sys_warning)
 									.setAutoCancel(true)
+									.setContentIntent(myContentIntent) // the custo
 									.setContentTitle(contentTitle)
 									.setContentText(
 											contentText + " (" + ++mNotificationCount + ")");
 									//.setContentIntent(mContentIntent).setSound(soundURI)
 									//.setVibrate(mVibratePattern);
-
-							
-							
+				
 							
 							
 							// TODO: Send the notification
 							NotificationManager mNotificationManager = (NotificationManager) mApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
 							mNotificationManager.notify(MY_NOTIFICATION_ID,
 									notificationBuilder.build());
-
-							
 							
 
 							Log.i(TAG, "Notification Area Notification sent");

@@ -127,7 +127,8 @@ public class MainActivity extends Activity implements SelectionListener {
 						// String tmp = getResultData() == null ? "" : getResultData();
 						// setResultData(tmp + ":Receiver 1:");
 					
-						setResultCode(MainActivity.IS_ALIVE);
+						//setResultCode(MainActivity.IS_ALIVE);  // normally use, test using 0
+						setResultCode(0);
 					}	
 					
 				}

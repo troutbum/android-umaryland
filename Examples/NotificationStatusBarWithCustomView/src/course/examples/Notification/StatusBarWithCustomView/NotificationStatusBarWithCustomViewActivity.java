@@ -45,8 +45,8 @@ public class NotificationStatusBarWithCustomViewActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		mNotificationIntent = new Intent(getApplicationContext(),
-				NotificationSubActivity.class);
+		mNotificationIntent = new Intent(getApplicationContext(),     
+				NotificationSubActivity.class);         // the intent to create sub activity
 		mContentIntent = PendingIntent.getActivity(getApplicationContext(), 0,
 				mNotificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -68,10 +68,10 @@ public class NotificationStatusBarWithCustomViewActivity extends Activity {
 					.setTicker(tickerText)
 					.setSmallIcon(android.R.drawable.stat_sys_warning)
 					.setAutoCancel(true)
-					.setContentIntent(mContentIntent)
+					.setContentIntent(mContentIntent) // the custom
 					.setSound(soundURI)
 					.setVibrate(mVibratePattern)
-					.setContent(mContentView);
+					.setContent(mContentView);    // the view when user pulls notification drawer
 
 				// Pass the Notification to the NotificationManager:
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
