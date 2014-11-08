@@ -65,7 +65,7 @@ public class AudioVideoRingtoneManagerActivity extends Activity {
 	private void playRingtone(Ringtone newRingtone) {
 
 		if (null != mCurrentRingtone && mCurrentRingtone.isPlaying())
-			mCurrentRingtone.stop();
+			mCurrentRingtone.stop();	//stop currently playing ring tone
 
 		mCurrentRingtone = newRingtone;
 

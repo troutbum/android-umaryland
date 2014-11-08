@@ -13,12 +13,12 @@ public class TransitionDrawableActivity extends Activity {
 		setContentView(R.layout.main);
 		
 		TransitionDrawable transition = (TransitionDrawable) getResources()
-				.getDrawable(R.drawable.shape_transition);
+				.getDrawable(R.drawable.shape_transition);    //transition resource with 2 item tag for 1 drawable
 
-		transition.setCrossFadeEnabled(true);
+		transition.setCrossFadeEnabled(true);  //
 
 		((ImageView) findViewById(R.id.image_view)).setImageDrawable(transition);
 		
-		transition.startTransition(5000);
+		transition.startTransition(5000);  // start transition, duration 500
 	}
 }

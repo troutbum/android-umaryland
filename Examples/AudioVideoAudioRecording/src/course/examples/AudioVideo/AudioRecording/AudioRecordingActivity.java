@@ -32,7 +32,7 @@ public class AudioRecordingActivity extends Activity {
 		final ToggleButton mRecordButton = (ToggleButton) findViewById(R.id.record_button);
 		final ToggleButton mPlayButton = (ToggleButton) findViewById(R.id.play_button);
 
-		// Set up record Button
+		// Set up record Button (when toggle button changes)
 		mRecordButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override

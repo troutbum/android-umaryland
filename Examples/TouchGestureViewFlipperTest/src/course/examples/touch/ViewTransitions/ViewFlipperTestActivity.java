@@ -34,10 +34,10 @@ public class ViewFlipperTestActivity extends Activity {
 					@Override
 					public boolean onFling(MotionEvent e1, MotionEvent e2,
 							float velocityX, float velocityY) {
-						if (velocityX < -10.0f) {
+						if (velocityX < -10.0f) {  //if a fast fling start animation 
 							mCurrentLayoutState = mCurrentLayoutState == 0 ? 1
 									: 0;
-							switchLayoutStateTo(mCurrentLayoutState);
+							switchLayoutStateTo(mCurrentLayoutState);  //see animation method
 						}
 						return true;
 					}
@@ -45,7 +45,7 @@ public class ViewFlipperTestActivity extends Activity {
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
+	public boolean onTouchEvent(MotionEvent event) {   // touches in view passed to mGestureDetector
 		return mGestureDetector.onTouchEvent(event);
 	}
 

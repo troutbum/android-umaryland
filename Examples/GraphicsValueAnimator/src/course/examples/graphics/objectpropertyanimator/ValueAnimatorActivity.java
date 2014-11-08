@@ -37,15 +37,15 @@ public class ValueAnimatorActivity extends Activity {
 		
 		final ImageView imageView = (ImageView) findViewById(R.id.image_view);
 		
-		ValueAnimator anim = ValueAnimator.ofObject(new ArgbEvaluator(), RED,
+		ValueAnimator anim = ValueAnimator.ofObject(new ArgbEvaluator(), RED,  //interpolates colors
 				BLUE);
 
-		anim.addUpdateListener(new AnimatorUpdateListener() {
+		anim.addUpdateListener(new AnimatorUpdateListener() {  // called back each time new anim frames
 
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
 				imageView.setBackgroundColor((Integer) animation
-						.getAnimatedValue());
+						.getAnimatedValue());   // get current color
 			}
 		});
 		

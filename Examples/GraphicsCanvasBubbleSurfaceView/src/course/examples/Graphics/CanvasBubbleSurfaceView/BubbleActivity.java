@@ -26,12 +26,12 @@ public class BubbleActivity extends Activity {
 
 		RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.frame);
 		final BubbleView bubbleView = new BubbleView(getApplicationContext(),
-				BitmapFactory.decodeResource(getResources(), R.drawable.b128));
+				BitmapFactory.decodeResource(getResources(), R.drawable.b128));  //resource bitmap
 
 		relativeLayout.addView(bubbleView);
 	}
 
-	private class BubbleView extends SurfaceView implements
+	private class BubbleView extends SurfaceView implements  //custom view class with SurfaceHolder callback
 			SurfaceHolder.Callback {
 
 		private final Bitmap mBitmap;
@@ -74,15 +74,15 @@ public class BubbleActivity extends Activity {
 			mPainter.setAntiAlias(true);
 
 			mSurfaceHolder = getHolder();
-			mSurfaceHolder.addCallback(this);
+			mSurfaceHolder.addCallback(this);      //register for callbacks
 		}
 
 		private void drawBubble(Canvas canvas) {
-			canvas.drawColor(Color.DKGRAY);
-			mRotation += ROT_STEP;
-			canvas.rotate(mRotation, mY + mBitmapHeightAndWidthAdj, mX
+			canvas.drawColor(Color.DKGRAY);  // redraw background
+			mRotation += ROT_STEP;  // rotate canvas
+			canvas.rotate(mRotation, mY + mBitmapHeightAndWidthAdj, mX 
 					+ mBitmapHeightAndWidthAdj);
-			canvas.drawBitmap(mBitmap, mY, mX, mPainter);
+			canvas.drawBitmap(mBitmap, mY, mX, mPainter);  // redraw bubble on canvas
 		}
 
 		private boolean move() {
@@ -104,15 +104,15 @@ public class BubbleActivity extends Activity {
 		}
 
 		@Override
-		public void surfaceCreated(SurfaceHolder holder) {
+		public void surfaceCreated(SurfaceHolder holder) {      // new thread & start
 			mDrawingThread = new Thread(new Runnable() {
 				public void run() {
 					Canvas canvas = null;
-					while (!Thread.currentThread().isInterrupted() && move()) {
-						canvas = mSurfaceHolder.lockCanvas();
-						if (null != canvas) {
-							drawBubble(canvas);
-							mSurfaceHolder.unlockCanvasAndPost(canvas);
+					while (!Thread.currentThread().isInterrupted() && move()) {  // see if interrupted, move: see if left screen
+						canvas = mSurfaceHolder.lockCanvas();                    // lock 
+						if (null != canvas) {                                    
+							drawBubble(canvas);									// draw			
+							mSurfaceHolder.unlockCanvasAndPost(canvas);         // unlock
 						}
 					}
 				}

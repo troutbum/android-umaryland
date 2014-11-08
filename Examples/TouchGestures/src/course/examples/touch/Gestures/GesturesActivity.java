@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class GesturesActivity extends Activity implements
-		OnGesturePerformedListener {
+		OnGesturePerformedListener {						// interface
 	private static final String NO = "No";
 	private static final String YES = "Yes";
 	private static final String PREV = "Prev";
@@ -33,15 +33,15 @@ public class GesturesActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		mFrame = (FrameLayout) findViewById(R.id.frame);
+		mFrame = (FrameLayout) findViewById(R.id.frame);		//ref to frame layout
 		mBgColor = new Random().nextInt(0xFFFFFF) | 0xFF000000;
 		mFirstColor = mBgColor;
 		mFrame.setBackgroundColor(mBgColor);
 
-		mLayout = (RelativeLayout) findViewById(R.id.main);
+		mLayout = (RelativeLayout) findViewById(R.id.main);		//ref to layout for entire app
 		mLayout.setBackgroundColor(mStartBgColor);
 
-		mLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
+		mLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);  //read gestures
 		if (!mLibrary.load()) {
 			finish();
 		}

@@ -15,7 +15,7 @@ public class GraphicsFrameAnimationActivity extends Activity {
 
 		ImageView imageView = (ImageView) findViewById(R.id.countdown_frame);
 
-		imageView.setBackgroundResource(R.drawable.view_animation);
+		imageView.setBackgroundResource(R.drawable.view_animation);  // animation resource
 
 		mAnim = (AnimationDrawable) imageView.getBackground();
 	}
@@ -31,7 +31,7 @@ public class GraphicsFrameAnimationActivity extends Activity {
 
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
+	public void onWindowFocusChanged(boolean hasFocus) {    // when window gains/loses focus
 		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus) {
 			mAnim.start();

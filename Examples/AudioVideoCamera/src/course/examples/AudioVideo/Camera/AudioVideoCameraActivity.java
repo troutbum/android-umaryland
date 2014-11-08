@@ -59,7 +59,7 @@ public class AudioVideoCameraActivity extends Activity {
 		mSurfaceHolder = surfaceView.getHolder();
 
 		// Set callback Object for the SurfaceHolder
-		mSurfaceHolder.addCallback(mSurfaceHolderCallback);
+		mSurfaceHolder.addCallback(mSurfaceHolderCallback);  //callback object
 
 	}
 

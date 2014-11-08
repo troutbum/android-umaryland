@@ -27,15 +27,15 @@ public class GraphicsViewPropertyAnimatorActivity extends Activity {
 		mImageView = (ImageView) findViewById(R.id.icon);
 
 		if (hasFocus) {
-			fadeIn.run();
+			fadeIn.run();  //run method of fadeIn object, runnable
 		}
 	}
 
 	Runnable fadeIn = new Runnable() {
 		public void run() {
 			mImageView.animate().setDuration(3000)
-					.setInterpolator(new LinearInterpolator()).alpha(1.0f)
-					.withEndAction(rotate);
+					.setInterpolator(new LinearInterpolator()).alpha(1.0f)  //fully opaque
+					.withEndAction(rotate);  //rotate runnable next below
 		}
 	};
 
@@ -43,7 +43,7 @@ public class GraphicsViewPropertyAnimatorActivity extends Activity {
 		public void run() {
 			mImageView.animate().setDuration(4000)
 					.setInterpolator(new AccelerateInterpolator())
-					.rotationBy(720.0f).withEndAction(translate);
+					.rotationBy(720.0f).withEndAction(translate);  //ends by calling next step
 		}
 	};
 

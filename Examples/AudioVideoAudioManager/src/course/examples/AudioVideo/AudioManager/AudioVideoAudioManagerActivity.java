@@ -32,7 +32,7 @@ public class AudioVideoAudioManagerActivity extends Activity {
 
 		// Display current volume level in TextView
 		final TextView tv = (TextView) findViewById(R.id.textView1);
-		tv.setText(String.valueOf(mVolume));
+		tv.setText(String.valueOf(mVolume));							//textview for volume
 
 		// Set up Button to increase the volume
 		final Button upButton = (Button) findViewById(R.id.button2);
@@ -107,7 +107,7 @@ public class AudioVideoAudioManagerActivity extends Activity {
 
 		});
 
-		// Request audio focus
+		// Request audio focus (WANTS TO BE IN CHARGE OF AUDIO PLAYED ON DEVICE)
 		int result = mAudioManager.requestAudioFocus(afChangeListener,
 				AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 

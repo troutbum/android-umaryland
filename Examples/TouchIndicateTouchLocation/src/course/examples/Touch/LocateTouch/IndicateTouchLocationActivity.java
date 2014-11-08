@@ -41,7 +41,7 @@ public class IndicateTouchLocationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		mFrame = (FrameLayout) findViewById(R.id.frame);
+		mFrame = (FrameLayout) findViewById(R.id.frame);   //Recipient of OnTouchListener()
 
 		// Initialize pool of View.
 		initViews();
@@ -51,32 +51,32 @@ public class IndicateTouchLocationActivity extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 
-				switch (event.getActionMasked()) {
+				switch (event.getActionMasked()) {    //check action code for new motion event
 
 				// Show new MarkerView
 				
-				case MotionEvent.ACTION_DOWN:
+				case MotionEvent.ACTION_DOWN:		// either detects a new touch
 				case MotionEvent.ACTION_POINTER_DOWN: {
 
-					int pointerIndex = event.getActionIndex();
+					int pointerIndex = event.getActionIndex();        //use to create
 					int pointerID = event.getPointerId(pointerIndex);
 
-					MarkerView marker = mInactiveMarkers.remove();
+					MarkerView marker = mInactiveMarkers.remove();  //gets MarkerView from inactive
 
 					if (null != marker) {
-						mActiveMarkers.put(pointerID, marker);
+						mActiveMarkers.put(pointerID, marker);  //places in active list
 
-						marker.setXLoc(event.getX(pointerIndex));
+						marker.setXLoc(event.getX(pointerIndex));   //updates location of marker
 						marker.setYLoc(event.getY(pointerIndex));
 
-						updateTouches(mActiveMarkers.size());
+						updateTouches(mActiveMarkers.size());  //updates total number of markers
 
-						mFrame.addView(marker);
+						mFrame.addView(marker);  //add marker to activity's main view
 					}
 					break;
 				}
 
-				// Remove one MarkerView
+				// Remove one MarkerView (reverse of above process)
 				
 				case MotionEvent.ACTION_UP:
 				case MotionEvent.ACTION_POINTER_UP: {
@@ -98,7 +98,7 @@ public class IndicateTouchLocationActivity extends Activity {
 				}
 				
 				
-				// Move all currently active MarkerViews
+				// Move all currently active MarkerViews (update and redraw)
 				
 				case MotionEvent.ACTION_MOVE: {
 
