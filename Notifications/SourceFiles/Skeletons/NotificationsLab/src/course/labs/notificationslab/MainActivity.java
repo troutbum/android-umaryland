@@ -119,7 +119,7 @@ public class MainActivity extends Activity implements SelectionListener {
 					
 					if (isOrderedBroadcast()) {
 						Log.i(TAG, "This is an ordered broadcast");
-						// abortBroadcast();  // use to kill further broadcast				
+										
 						
 						// use get/setResultData
 						// when a BroadcastIntent wants a return code or data
@@ -127,8 +127,10 @@ public class MainActivity extends Activity implements SelectionListener {
 						// String tmp = getResultData() == null ? "" : getResultData();
 						// setResultData(tmp + ":Receiver 1:");
 					
-						//setResultCode(MainActivity.IS_ALIVE);  // normally use, test using 0
-						setResultCode(0);
+						setResultCode(MainActivity.IS_ALIVE);  // normally use, test using 0
+						//setResultCode(0);
+						abortBroadcast();  // use to kill further broadcast
+						
 					}	
 					
 				}

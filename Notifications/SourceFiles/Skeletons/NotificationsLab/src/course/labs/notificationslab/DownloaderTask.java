@@ -21,24 +21,24 @@ import android.widget.RemoteViews;
 
 public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 
-	private static final int SIM_NETWORK_DELAY = 5000;  // 1000
+	private static final int SIM_NETWORK_DELAY = 1000;  // 1000
 	private static final String TAG = "Lab-Notifications";
 	private final int MY_NOTIFICATION_ID = 11151990;
 	private String mFeeds[] = new String[3];
 	private MainActivity mParentActivity;
 	private Context mApplicationContext;
-	
+
 	// stuff I added:
 	private PendingIntent myContentIntent;
-	private int mNotificationCount;
+	//private int mNotificationCount;
 	private final CharSequence tickerText = "Downloading Tweets";
 	private CharSequence contentTitle = " ";
-	private final CharSequence contentText = "You've Been Notified!";
+
 
 
 	// Raw feed file IDs used in this offline version of the app
 	public static final int txtFeeds[] = { R.raw.tswift, R.raw.rblack,
-			R.raw.lgaga };
+		R.raw.lgaga };
 
 	// Constructor
 	public DownloaderTask(MainActivity parentActivity) {
@@ -153,96 +153,87 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 				MainActivity.DATA_REFRESHED_ACTION), null,
 				new BroadcastReceiver() {
 
-					final String failMsg = "Download has failed. Please retry Later.";
-					final String successMsg = "Download completed successfully.";
+			final String failMsg = "Download has failed. Please retry Later.";
+			final String successMsg = "Download completed successfully.";
 
-					@Override
-					public void onReceive(Context context, Intent intent) {
+			@Override
+			public void onReceive(Context context, Intent intent) {
 
+				Log.i(TAG,
+						"Entered result receiver's onReceive() method");
+
+				// TODO: Check whether the result code is not MainActivity.IS_ALIVE
+				// i.e the App is not active, so send a NOTIFICATION)
+
+				if (getResultCode() != MainActivity.IS_ALIVE) {	
+
+					Log.i(TAG,
+							"MainActivity is NOT ALIVE - Send Notification!");
+
+					// TODO: If so, create a PendingIntent using the
+					// restartMainActivityIntent and set its flags
+					// to FLAG_UPDATE_CURRENT
+
+					myContentIntent = PendingIntent.getActivity(mApplicationContext.getApplicationContext(), 0,
+							restartMainActivtyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+					// Uses R.layout.custom_notification for the
+					// layout of the notification View. The xml
+					// file is in res/layout/custom_notification.xml
+
+					RemoteViews myContentView = new RemoteViews(
+							mApplicationContext.getPackageName(),
+							R.layout.custom_notification);
+
+					// TODO: Set the notification View's text to
+					// reflect whether the download completed
+					// successfully
+
+					// use this to keep track of multiple notifications
+					//	myContentView.setTextViewText(R.id.text, contentText + " ("
+					//		+ ++mNotificationCount + ")");
+
+					if (success) {
+						myContentView.setTextViewText(R.id.text, successMsg);
+						contentTitle = successMsg;
 						Log.i(TAG,
-								"Entered result receiver's onReceive() method");
-
-						// TODO: Check whether the result code is not MainActivity.IS_ALIVE
-						// i.e the App is not active, so send a NOTIFICATION)
-																
-						if (getResultCode() != MainActivity.IS_ALIVE) {	
-
-							Log.i(TAG,
-									"MainActivity is NOT ALIVE - Send Notification!");
-							
-							// TODO: If so, create a PendingIntent using the
-							// restartMainActivityIntent and set its flags
-							// to FLAG_UPDATE_CURRENT
-							
-
-//							//private Intent mNotificationIntent;
-//							//private PendingIntent mContentIntent;
-//							
-//							Intent mNotificationIntent = new Intent(mApplicationContext.getApplicationContext(),
-//									Notification.class);
-							
-							myContentIntent = PendingIntent.getActivity(mApplicationContext.getApplicationContext(), 0,
-									restartMainActivtyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-							
-
-							// Uses R.layout.custom_notification for the
-							// layout of the notification View. The xml
-							// file is in res/layout/custom_notification.xml
-
-							RemoteViews myContentView = new RemoteViews(
-									mApplicationContext.getPackageName(),
-									R.layout.custom_notification);
-
-							// TODO: Set the notification View's text to
-							// reflect whether the download completed
-							// successfully
-
-//							myContentView.setTextViewText(R.id.text, contentText + " ("
-//									+ ++mNotificationCount + ")");
-
-							if (success) {
-								myContentView.setTextViewText(R.id.text, successMsg);
-								contentTitle = successMsg;
-								Log.i(TAG,
-										"Reached custom notification:  setTextView = successMsg");
-							} 
-							else {
-								myContentView.setTextViewText(R.id.text, failMsg);
-								contentTitle = failMsg;
-							}
-
-							// TODO: Use the Notification.Builder class to
-							// create the Notification. You will have to set
-							// several pieces of information. You can use
-							// android.R.drawable.stat_sys_warning
-							// for the small icon. You should also
-							// setAutoCancel(true).
-
-							Notification.Builder notificationBuilder = new Notification.Builder(
-									mApplicationContext.getApplicationContext())
-									.setTicker(tickerText)
-									.setSmallIcon(android.R.drawable.stat_sys_warning)
-									.setAutoCancel(true)
-									.setContentIntent(myContentIntent) // the custom intent is sent
-									.setContentTitle(contentTitle)
-									.setContent(myContentView);
-//									.setContentText(
-//											contentText + " (" + ++mNotificationCount + ")");
-//									//.setContentIntent(mContentIntent).setSound(soundURI)
-//									//.setVibrate(mVibratePattern);
-				
-							
-							
-							// TODO: Send the notification
-							NotificationManager mNotificationManager = (NotificationManager) mApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
-							mNotificationManager.notify(MY_NOTIFICATION_ID,
-									notificationBuilder.build());
-							
-
-							Log.i(TAG, "Notification Area Notification sent");
-						}
+								"Reached custom notification:  setTextView = successMsg");
+					} 
+					else {
+						myContentView.setTextViewText(R.id.text, failMsg);
+						contentTitle = failMsg;
 					}
-				}, null, 0, null, null);
+
+					// TODO: Use the Notification.Builder class to
+					// create the Notification. You will have to set
+					// several pieces of information. You can use
+					// android.R.drawable.stat_sys_warning
+					// for the small icon. You should also
+					// setAutoCancel(true).
+
+					Notification.Builder notificationBuilder = new Notification.Builder(
+							mApplicationContext.getApplicationContext())
+					.setTicker(tickerText)
+					.setSmallIcon(android.R.drawable.stat_sys_warning)
+					.setAutoCancel(true)
+					.setContentIntent(myContentIntent) // the custom intent is sent
+					.setContentTitle(contentTitle)
+					.setContent(myContentView);
+					//	.setContentText(
+					//		contentText + " (" + ++mNotificationCount + ")");
+					//	.setContentIntent(mContentIntent).setSound(soundURI)
+					//	.setVibrate(mVibratePattern);
+
+					// TODO: Send the notification
+					NotificationManager mNotificationManager = (NotificationManager) mApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
+					mNotificationManager.notify(MY_NOTIFICATION_ID,
+							notificationBuilder.build());
+
+					Log.i(TAG, "Notification Area Notification sent");
+				}
+			}
+		}, null, 0, null, null);
 	}
 
 	// Saves the tweets to a file
