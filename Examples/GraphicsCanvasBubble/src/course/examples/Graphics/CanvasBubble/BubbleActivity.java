@@ -28,13 +28,13 @@ public class BubbleActivity extends Activity {
 		final BubbleView bubbleView = new BubbleView(getApplicationContext(),
 				bitmap);
 
-		frame.addView(bubbleView);
+		frame.addView(bubbleView);  // add view to layout
 
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (bubbleView.move()) {
-					bubbleView.postInvalidate();
+					bubbleView.postInvalidate();  // redraw the view
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
