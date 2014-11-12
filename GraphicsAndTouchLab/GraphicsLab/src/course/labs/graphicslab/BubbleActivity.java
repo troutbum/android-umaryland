@@ -72,16 +72,11 @@ public class BubbleActivity extends Activity {
 		// Load basic bubble Bitmap
 		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.b64);
 
+		// Greeting
 		Log.i (TAG,"Issuing Toast Message");		
 		Toast.makeText(getBaseContext(), "Click empty space to create a bubble",
 		        Toast.LENGTH_LONG).show();
-		
-		// <<<<<<<< TEMP >>>>>>>>>>>>>>>>>>>>>>>>	
-//		BubbleView bubbleView = 
-//				new BubbleView(getApplicationContext(), 250, 250);
-//
-//		mFrame.addView(bubbleView);  // add view to layout
-	
+			
 	}
 
 	@Override
@@ -166,28 +161,38 @@ public class BubbleActivity extends Activity {
 
 			@Override
 			public boolean onSingleTapConfirmed(MotionEvent event) {
-
 				// TODO - Implement onSingleTapConfirmed actions.
 				// You can get all Views in mFrame using the
 				// ViewGroup.getChildCount() method
 
-				// iterate through mFrame
-				// BubbleView.intersects() to see if
-				// existing a BubbleView exists under the tap
-				// then pop it, otherwise create a new BubbleView
-								
+				// Get tap location
+				float tapX = event.getX();
+				float tapY = event.getY();
+				Log.i (TAG,"X = " + tapX);
+				Log.i (TAG,"Y = " + tapY);
+					
+				// Iterate through mFrame of BubbleViews
 				for(int i=0; i < mFrame.getChildCount(); ++i) {
-				    View nextChild = mFrame.getChildAt(i);
-				    if (nextChild.intersects(x,y))
-				
+					View nextChild = mFrame.getChildAt(i);
+					// Check if BubbleView exists under the tap XY
+					if (((BubbleView) nextChild).intersects(tapX,tapY)) {
+						// If so, Pop the BubbleView
+						((BubbleView) nextChild).stopMovement(true);  
+						
+						Log.i (TAG,"POP BubbleView");
+						Log.i (TAG,"BubbleView count = " + mFrame.getChildCount());
+						
+						return true;
+					}
 				}
-				
-				// create new BubbleView at tap's location 
-				BubbleView bubbleView = 
-						new BubbleView(getApplicationContext(), event.getX(), event.getY());
-				mFrame.addView(bubbleView);  // add view to layout	
 
+				// Otherwise, create new BubbleView at tap's location 
+				BubbleView bubbleView = 
+						new BubbleView(getApplicationContext(), tapX, tapY);
+				mFrame.addView(bubbleView);  // add view to layout	
 				
+				Log.i (TAG,"ADD BubbleView");
+				Log.i (TAG,"BubbleView count = " + mFrame.getChildCount());
 				
 				return true;
 			}
@@ -199,9 +204,7 @@ public class BubbleActivity extends Activity {
 
 		// TODO - Delegate the touch to the gestureDetector
 		return mGestureDetector.onTouchEvent(event);
-		
-		// comment out skeleton code
-		// return true || false;		
+			
 	}
 
 	@Override
@@ -250,6 +253,7 @@ public class BubbleActivity extends Activity {
 
 			// Radius of the Bitmap
 			mRadius = mScaledBitmapWidth / 2;
+			Log.i (TAG,"mRadius = " + mRadius);	
 			mRadiusSquared = mRadius * mRadius;
 			
 			// Adjust position to center the bubble under user's finger
@@ -321,11 +325,11 @@ public class BubbleActivity extends Activity {
 				int min = 1;
 				int max = 3;
 				mScaledBitmapWidth = (r.nextInt((max-min) + 1) + min) * BITMAP_SIZE;
-				
+				Log.i (TAG,"mScaledBitmapWidth = " + mScaledBitmapWidth );	
 			}
 
 			// TODO - create the scaled bitmap using size set above
-			this.mScaledBitmap = Bitmap.createScaledBitmap(mBitmap,
+			mScaledBitmap = Bitmap.createScaledBitmap(mBitmap,
 					mScaledBitmapWidth, mScaledBitmapWidth, false);
 
 		}
@@ -369,15 +373,18 @@ public class BubbleActivity extends Activity {
 		private synchronized boolean intersects(float x, float y) {
 
 			// TODO - Return true if the BubbleView intersects position (x,y)
-			if (x < 0 - mScaledBitmapWidth
-					|| x > mDisplayHeight + mScaledBitmapWidth
-					|| y < 0 - mScaledBitmapWidth
-					|| y > mDisplayWidth + mScaledBitmapWidth) {
-				return false;
-			} else {
-				return true;
-			}
-			
+//			if (x < 0 - mScaledBitmapWidth
+//					|| x > mDisplayHeight + mScaledBitmapWidth
+//					|| y < 0 - mScaledBitmapWidth
+//					|| y > mDisplayWidth + mScaledBitmapWidth) {
+//				Log.i (TAG,"Intersect FALSE");
+//				return false;
+//			} else {
+//				Log.i (TAG,"Intersect TRUE");
+//				return true;
+//			}
+			return ((mXPos - x) * (mXPos - x ) + 
+					(mYPos - y) * (mYPos - y)) <= mRadiusSquared;
 			
 //			return  true || false;
 
@@ -400,9 +407,10 @@ public class BubbleActivity extends Activity {
 					@Override
 					public void run() {
 
-						// TODO - Remove the BubbleView from mFrame
-
-
+						// TODO - Remove the BubbleView from mFrame						
+						mFrame.removeView(BubbleView.this);
+						Log.i (TAG,"stopMovement, BubbleView Count = " + 
+								mFrame.getChildCount());
 						
 						// TODO - If the bubble was popped by user,
 						// play the popping sound
@@ -438,7 +446,7 @@ public class BubbleActivity extends Activity {
 			canvas.rotate(mRotate, mXPos + mRadius, mYPos + mRadius);
 					
 			// TODO - draw the bitmap at it's new location
-			canvas.drawBitmap(mBitmap, mXPos, mYPos, mPainter);  // redraw bubble on canvas
+			canvas.drawBitmap(mScaledBitmap, mXPos, mYPos, mPainter);  // redraw bubble on canvas
 			
 			// TODO - restore the canvas
 			canvas.restore();
