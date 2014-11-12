@@ -175,9 +175,12 @@ public class BubbleActivity extends Activity {
 				// BubbleView.intersects() to see if
 				// existing a BubbleView exists under the tap
 				// then pop it, otherwise create a new BubbleView
+								
+				for(int i=0; i < mFrame.getChildCount(); ++i) {
+				    View nextChild = mFrame.getChildAt(i);
+				    if (nextChild.intersects(x,y))
 				
-//				for (i 0 to mFrame.getChildCount()
-//						mFrame.get
+				}
 				
 				// create new BubbleView at tap's location 
 				BubbleView bubbleView = 
