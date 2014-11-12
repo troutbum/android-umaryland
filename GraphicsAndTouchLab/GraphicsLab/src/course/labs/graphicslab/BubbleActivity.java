@@ -59,8 +59,6 @@ public class BubbleActivity extends Activity {
 	// Gesture Detector
 	private GestureDetector mGestureDetector;
 	
-	// TEMP
-	//BubbleView mBubbleView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,11 +76,11 @@ public class BubbleActivity extends Activity {
 		Toast.makeText(getBaseContext(), "Click empty space to create a bubble",
 		        Toast.LENGTH_LONG).show();
 		
-		// TEMP	>>>>>>>>>>>>>>>>>>>>>>>>	
-		BubbleView bubbleView = 
-				new BubbleView(getApplicationContext(), 250, 250);
-
-		mFrame.addView(bubbleView);  // add view to layout
+		// <<<<<<<< TEMP >>>>>>>>>>>>>>>>>>>>>>>>	
+//		BubbleView bubbleView = 
+//				new BubbleView(getApplicationContext(), 250, 250);
+//
+//		mFrame.addView(bubbleView);  // add view to layout
 	
 	}
 
@@ -173,6 +171,13 @@ public class BubbleActivity extends Activity {
 				// You can get all Views in mFrame using the
 				// ViewGroup.getChildCount() method
 
+				// iterate through mFrame
+				// BubbleView.intersects() to see if
+				// existing a BubbleView exists under the tap
+				// then pop it, otherwise create a new BubbleView
+				
+//				for (i 0 to mFrame.getChildCount()
+//						mFrame.get
 				
 				// create new BubbleView at tap's location 
 				BubbleView bubbleView = 
