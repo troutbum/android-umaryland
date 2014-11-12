@@ -170,16 +170,20 @@ public class BubbleActivity extends Activity {
 				float tapY = event.getY();
 				Log.i (TAG,"X = " + tapX);
 				Log.i (TAG,"Y = " + tapY);
-					
+				
+				// FIX EXIT OUT OF LOOPS!!!
 				// Iterate through mFrame of BubbleViews
 				for(int i=0; i < mFrame.getChildCount(); ++i) {
-					View nextChild = mFrame.getChildAt(i);
+
+					View nextChild = mFrame.getChildAt(i);		
+					Log.i (TAG,"Checking Child # " + i);
+					
 					// Check if BubbleView exists under the tap XY
 					if (((BubbleView) nextChild).intersects(tapX,tapY)) {
 						// If so, Pop the BubbleView
 						((BubbleView) nextChild).stopMovement(true);  
 						
-						Log.i (TAG,"POP BubbleView");
+						Log.i (TAG,"POPPED Child # " + i);
 						Log.i (TAG,"BubbleView count = " + mFrame.getChildCount());
 						
 						return true;
@@ -192,7 +196,7 @@ public class BubbleActivity extends Activity {
 				mFrame.addView(bubbleView);  // add view to layout	
 				
 				Log.i (TAG,"ADD BubbleView");
-				Log.i (TAG,"BubbleView count = " + mFrame.getChildCount());
+				Log.i (TAG,"Total BubbleViews = " + mFrame.getChildCount() + "\n\n");
 				
 				return true;
 			}
@@ -255,6 +259,7 @@ public class BubbleActivity extends Activity {
 			mRadius = mScaledBitmapWidth / 2;
 			Log.i (TAG,"mRadius = " + mRadius);	
 			mRadiusSquared = mRadius * mRadius;
+			Log.i (TAG,"mRadiusSquared = " + mRadiusSquared);	
 			
 			// Adjust position to center the bubble under user's finger
 			mXPos = x - mRadius;
@@ -373,6 +378,7 @@ public class BubbleActivity extends Activity {
 		private synchronized boolean intersects(float x, float y) {
 
 			// TODO - Return true if the BubbleView intersects position (x,y)
+			
 //			if (x < 0 - mScaledBitmapWidth
 //					|| x > mDisplayHeight + mScaledBitmapWidth
 //					|| y < 0 - mScaledBitmapWidth
@@ -383,6 +389,13 @@ public class BubbleActivity extends Activity {
 //				Log.i (TAG,"Intersect TRUE");
 //				return true;
 //			}
+			
+			Log.i (TAG,"Tap X = " + x);
+			Log.i (TAG,"Tap Y = " + y);
+			Log.i (TAG,"mXPos = " + mXPos);
+			Log.i (TAG,"mYPos = " + mYPos);		
+			Log.i (TAG,"mRadiusSquared = " + mRadiusSquared);	
+			
 			return ((mXPos - x) * (mXPos - x ) + 
 					(mYPos - y) * (mYPos - y)) <= mRadiusSquared;
 			
