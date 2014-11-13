@@ -30,13 +30,13 @@ public class BubbleActivity extends Activity {
 
 		frame.addView(bubbleView);  // add view to layout
 
-		new Thread(new Runnable() {
+		new Thread(new Runnable() {  // creates and starts a new thread
 			@Override
 			public void run() {
-				while (bubbleView.move()) {
-					bubbleView.postInvalidate();  // redraw the view
+				while (bubbleView.move()) {  // Changes BV location, returns True/False if still visible
+					bubbleView.postInvalidate();  // Redraws this BView
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(1000); // goes to sleep
 					} catch (InterruptedException e) {
 						Log.i(TAG, "InterruptedException");
 					}
@@ -92,7 +92,7 @@ public class BubbleActivity extends Activity {
 		}
 
 		@Override
-		protected void onDraw(Canvas canvas) {
+		protected void onDraw(Canvas canvas) {  // called via bubbleView.postInvalidate()
 			Coords tmp = mCurrent.getCoords();
 			canvas.drawBitmap(mBitmap, tmp.mX, tmp.mY, mPainter);
 		}
