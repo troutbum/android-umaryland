@@ -150,10 +150,24 @@ public class BubbleActivity extends Activity {
 				// TODO - Implement onFling actions.
 				// You can get all Views in mFrame one at a time
 				// using the ViewGroup.getChildAt() method
-
-			
 				
+				// "Look through existing objects"
+				// Iterate through mFrame of BubbleViews
+				float tapX = event1.getX();
+				float tapY = event1.getY();
 				
+				for(int i=0; i < mFrame.getChildCount(); ++i) {
+					View nextChild = mFrame.getChildAt(i);						
+					// if a BubbleView exists under the tap XY
+					if (((BubbleView) nextChild).intersects(tapX,tapY)) {
+						// Fling it!!!
+						((BubbleView) nextChild).deflect(velocityX, velocityY);		
+						Log.i (TAG,"POPPED Child # " + i);
+						Log.i (TAG,"BubbleView count = " + mFrame.getChildCount());				
+						return true;
+					}
+				}
+							
 				return true;
 			}
 
@@ -173,14 +187,14 @@ public class BubbleActivity extends Activity {
 				float tapY = event.getY();
 				Log.i (TAG,"X = " + tapX);
 				Log.i (TAG,"Y = " + tapY);
-				
-				// Look for existing objects
+
+				// "Look through existing objects"
 				// Iterate through mFrame of BubbleViews
 				for(int i=0; i < mFrame.getChildCount(); ++i) {
 
 					View nextChild = mFrame.getChildAt(i);		
 					Log.i (TAG,"Checking Child # " + i);
-					
+
 					// if a BubbleView exists under the tap XY
 					if (((BubbleView) nextChild).intersects(tapX,tapY)) {
 						// Pop it!!!
