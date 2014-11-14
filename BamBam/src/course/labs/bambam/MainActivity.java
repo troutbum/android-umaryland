@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
 		mFrame = (RelativeLayout) findViewById(R.id.frame);
 
 		// Load basic bubble Bitmap
-		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.b64);
+		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bam384);
 
 		// Greeting
 		Log.i (TAG,"Issuing Toast Message");		
@@ -115,8 +115,8 @@ public class MainActivity extends Activity {
 		});	
 			
 		// TODO - load the sound from res/raw/bubble_pop.wav
-		mSoundID = mSoundPool.load(this, R.raw.bubble_pop, 1);	
-		
+		//mSoundID = mSoundPool.load(this, R.raw.bubble_pop, 1);	
+		mSoundID = mSoundPool.load(this, R.raw.meow, 1);	
 
 	}
 
@@ -252,7 +252,8 @@ public class MainActivity extends Activity {
 
 	public class BubbleView extends View {
 
-		private static final int BITMAP_SIZE = 64;
+		//private static final int BITMAP_SIZE = 64;
+		private static final int BITMAP_SIZE = 384;
 		private static final int REFRESH_RATE = 40;
 		private final Paint mPainter = new Paint();
 		private ScheduledFuture<?> mMoverFuture;
@@ -341,13 +342,15 @@ public class MainActivity extends Activity {
 		private void createScaledBitmap(Random r) {
 
 			if (speedMode != RANDOM) {
-				mScaledBitmapWidth = BITMAP_SIZE * 3;
+				//mScaledBitmapWidth = BITMAP_SIZE * 3;
+				mScaledBitmapWidth = BITMAP_SIZE / 3;
 			} else {
 
 				// TODO - set scaled bitmap size in range [1..3] * BITMAP_SIZE
 				int min = 1;
 				int max = 3;
-				mScaledBitmapWidth = (r.nextInt((max-min) + 1) + min) * BITMAP_SIZE;
+				//mScaledBitmapWidth = (r.nextInt((max-min) + 1) + min) * BITMAP_SIZE;
+				mScaledBitmapWidth = BITMAP_SIZE / (r.nextInt((max-min) + 1) + min);
 				Log.i (TAG,"mScaledBitmapWidth = " + mScaledBitmapWidth );	
 			}
 
@@ -431,9 +434,10 @@ public class MainActivity extends Activity {
 						// TODO - If the bubble was popped by user,
 						// play the popping sound
 						if (wasPopped) {
+							Log.i (TAG,"Reached playSoundEffect() for wasPopped");
+							//mAudioManager.playSoundEffect(mSoundID);  // this plays a system sound!!
+							mSoundPool.play(mSoundID, mStreamVolume, mStreamVolume, 1, 0, 1f);
 
-							mAudioManager.playSoundEffect(mSoundID);
-							
 						}
 					}
 				});
