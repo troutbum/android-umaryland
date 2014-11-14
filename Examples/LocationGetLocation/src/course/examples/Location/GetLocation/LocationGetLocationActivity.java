@@ -63,7 +63,7 @@ public class LocationGetLocationActivity extends Activity {
 			finish();
 
 		// Get best last location measurement
-		mBestReading = bestLastKnownLocation(MIN_LAST_READ_ACCURACY, FIVE_MIN);
+		mBestReading = bestLastKnownLocation(MIN_LAST_READ_ACCURACY, FIVE_MIN);  // from every provider, returns best
 
 		// Display last reading information
 		if (null != mBestReading) {
@@ -96,7 +96,7 @@ public class LocationGetLocationActivity extends Activity {
 					// Update display
 					updateDisplay(location);
 
-					if (mBestReading.getAccuracy() < MIN_ACCURACY)
+					if (mBestReading.getAccuracy() < MIN_ACCURACY)       // Good enough, so unregister listener
 						mLocationManager.removeUpdates(mLocationListener);
 
 				}

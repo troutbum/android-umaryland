@@ -30,9 +30,14 @@
             </intent-filter>
         </activity>
 
+        
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCqsEYOMFgxclOsIyBxWQHB9JAg15_zw6g" />
+            android:value="AIzaSyCzcq8VFRv6zg0yxkWAJQj5zO7Gm9Os3C4" />
+        <meta-data 
+            android:name="com.google.android.gms.version"
+        	android:value="@integer/google_play_services_version" />    
+        
     </application>
 
 </manifest>
