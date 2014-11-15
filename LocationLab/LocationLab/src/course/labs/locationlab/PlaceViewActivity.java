@@ -193,8 +193,6 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		
 		
 		
-		
-		
 		mLastLocationReading = null;
 		
 	}
