@@ -1,5 +1,8 @@
 package course.labs.locationlab;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.location.Location;
@@ -40,6 +43,8 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Log.i(TAG, "Welcome to the Location Lab!");
+		
 		// Set up the app's user interface. This class is a ListActivity, 
 		// so it has its own ListView. ListView's adapter should be a PlaceViewAdapter
 
@@ -77,15 +82,40 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 
 				// Toast if no current location
 				if (mLastLocationReading == null) {
-					Toast.makeText(getBaseContext(), "No Current Location is Available",
-					        Toast.LENGTH_LONG).show();
+					Toast.makeText(getBaseContext(), "No Current Location is Available.",
+							Toast.LENGTH_LONG).show();
+					Log.i(TAG, "Toasted: No Current Location is Available");
 				}
-				
-				// Check if PlaceBadge exists using intersects()
-//				else ()
-				
-			}
 
+				else {					
+//					// Check if PlaceBadge exists using intersects()
+//					for (int i=0; i < mAdapter.getCount(); ++i) {
+//						if (((PlaceViewAdapter) mAdapter.getItem(i)).intersects(mLastLocationReading)) {
+//							Toast.makeText(getBaseContext(), "You already have this location badge.",
+//									Toast.LENGTH_LONG).show();
+//							//return;
+//						}
+//						else {
+//							// Tricky AsyncTask syntax - see Notifications Lab
+//							// doInBackground method accessed via .execute()
+//							
+//							new PlaceDownloaderTask(PlaceViewActivity.this, sHasNetwork).execute(mLastLocationReading);										
+//							Log.i(TAG, "Downloading a PlaceRecord via AsyncTask");
+//
+//							//	this does not work:					
+//							//		PlaceDownloaderTask mPlaceDownloaderTask = 
+//							//			new PlaceDownloaderTask(PlaceViewActivity.this, mMockLocationOn);					
+//							//		PlaceRecord mPlaceRecord = mPlaceDownloaderTask.doInBackground(mLastLocationReading);
+//
+//						}
+//					}
+
+					new PlaceDownloaderTask(PlaceViewActivity.this, sHasNetwork).execute(mLastLocationReading);										
+					Log.i(TAG, "Downloading a PlaceRecord via AsyncTask");
+					
+				}
+			}
+			
 		});
 
 		placesListView.addFooterView(footerView);
@@ -104,7 +134,6 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		// Only keep this last reading if it is fresh - less than 5 minutes old
 
 		Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
 		if (location != null) {
 
 			if ( location.getTime() > System.currentTimeMillis() - FIVE_MINS) {
@@ -117,11 +146,10 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		//
 		// note: PlaceViewActivity implements LocationListener therefore
 		// "this" acts like registering a listener "mLocationListener = new LocationLister()"
-		
-		mLocationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, mMinTime,
-				mMinDistance, this);
-	
+
+		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
+				mMinTime,mMinDistance, this);
+
 	}
 
 	@Override
@@ -138,7 +166,7 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		super.onPause();
 	}
 
-	// Callback method used by PlaceDownloaderTask
+	// CALLBACK method used by PlaceDownloaderTask
 	public void addNewPlace(PlaceRecord place) {
 		Log.i(TAG, "Entered addNewPlace()");
 
@@ -159,28 +187,43 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		
 		// Otherwise - add the PlaceBadge to the adapter
 		
+		
+		
+		// check if place record already exists
+		
+//		NEED TO CLEAN CHECK LOGIC		
+//		if (place.intersects(mLastLocationReading) == true) {
+//
+//			Toast.makeText(getBaseContext(), "You already have this location badge.",
+//					Toast.LENGTH_LONG).show();
+//			Log.i(TAG, "Toasted: You already have this location badge.");
+//			return;
+//		}
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		// if PlaceBadge for location does not exist
+		if (place.getPlace() == null) {
+			Toast.makeText(getBaseContext(), "PlaceBadge could not be acquired.",
+					Toast.LENGTH_LONG).show();
+			Log.i(TAG, "Toasted: PlaceBadge could not be acquired.");
+			return;
+		}
+
+		if (place.getCountryName() == null) {		
+			Toast.makeText(getBaseContext(), "There is no country at this location.",
+					Toast.LENGTH_LONG).show();
+			Log.i(TAG, "Toasted: There is no country at this location.");
+			return;
+		}
+
+		mAdapter.add(place);   //add place
 	}
 	
+				
+		
+		
+	
 	// LocationListener methods
-	// "this method is called when the location changes"
+	// "this method is called by Android when the location changes"
 	@Override
 	public void onLocationChanged(Location currentLocation) {
 
@@ -189,22 +232,23 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		// 1) If there is no last location, set the last location to the current
 		// location.
 		if (mLastLocationReading == null) {
-
 			mLastLocationReading = currentLocation;
-
 		}	
 			
 		// 2) If the current location is older than the last location, ignore
-		// the current location
+		// the current location	
+		if (currentLocation.getTime() < mLastLocationReading.getTime()) {
+			// do nothing?
+		}
 		
-		
+
 		// 3) If the current location is newer than the last locations, keep the
-		// current location.
-
-
+		// current location.	
+		if (currentLocation.getTime() > mLastLocationReading.getTime()) {
+			mLastLocationReading = currentLocation;
+		}
 		
-		
-		//mLastLocationReading = null;
+		//mLastLocationReading = null; (SKELETON)
 		
 	}
 

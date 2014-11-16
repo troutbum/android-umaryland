@@ -32,14 +32,14 @@ import android.util.Log;
 public class PlaceDownloaderTask extends AsyncTask<Location, Void, PlaceRecord> {
 
 	// False if you don't have network access
-	private boolean mHasNetwork = false;
+	private boolean mHasNetwork = true;
 
 	// Log TAG
 	private static final String TAG = "PlaceDownloaderTask";
 
 	// Optional TODO - Put your www.geonames.org account name here if you want to
 	// use the geonames.org web service. To use this service, you must register for a free account.
-	private static String USERNAME = "YOUR_ACCOUNT_NAME";
+	private static String USERNAME = "troutbum";
 
 	private HttpURLConnection mHttpUrl;
 	private WeakReference<PlaceViewActivity> mParent;
@@ -56,6 +56,7 @@ public class PlaceDownloaderTask extends AsyncTask<Location, Void, PlaceRecord> 
 	public PlaceDownloaderTask(PlaceViewActivity parent, boolean hasNetwork) {
 		super();
 
+		Log.i(TAG, "Entered - PlaceDownloaderTask constructor");
 		mParent = new WeakReference<PlaceViewActivity>(parent);
 		mHasNetwork = hasNetwork;
 
@@ -82,7 +83,8 @@ public class PlaceDownloaderTask extends AsyncTask<Location, Void, PlaceRecord> 
 	@Override
 	protected PlaceRecord doInBackground(Location... location) {
 		PlaceRecord place = null;
-
+		Log.i(TAG, "Entered - PlaceDownloaderTask.doInBackground()");
+		
 		if (mHasNetwork) {
 
 			// Get the PlaceBadge information
@@ -119,10 +121,12 @@ public class PlaceDownloaderTask extends AsyncTask<Location, Void, PlaceRecord> 
 	@Override
 	protected void onPostExecute(PlaceRecord result) {
 
+		Log.i(TAG, "Entered - PlaceDownloaderTask.onPostExecute()");	
 		// If you've acquired Place data and the parent is non-null
 		// call parent to add the PlaceBadge
 		if (null != result && null != mParent.get()) {
 			mParent.get().addNewPlace(result);
+			Log.i(TAG, "Entered - PlaceDownloaderTask callback to addNewPlace()");
 		}
 	}
 
