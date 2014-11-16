@@ -20,7 +20,7 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 	private static final String TAG = "Lab-Location";
 
 	// Set to false if you don't have network access
-	public static boolean sHasNetwork = false;
+	public static boolean sHasNetwork = true;  // changed from false
 
 	private Location mLastLocationReading;
 	private PlaceViewAdapter mAdapter;
@@ -47,9 +47,11 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		ListView placesListView = getListView();
 
 		// TODO - add a footerView to the ListView
-		// You can use footer_view.xml to define the footer
-
-		View footerView = null;
+		// You can use footer_view.xml to define the footer	
+		// >>>(UI Lab) Put divider and Inflate footerView for footer_view.xml file
+	
+		getListView().setFooterDividersEnabled(true);
+		View footerView = getLayoutInflater().inflate(R.layout.footer_view, null);		
 
 		// TODO - footerView must respond to user clicks, handling 3 cases:
 
@@ -73,22 +75,14 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 			public void onClick(View arg0) {
 				Log.i(TAG, "Entered footerView.OnClickListener.onClick()");
 
-
+				// Toast if no current location
+				if (mLastLocationReading == null) {
+					Toast.makeText(getBaseContext(), "No Current Location is Available",
+					        Toast.LENGTH_LONG).show();
+				}
 				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+				// Check if PlaceBadge exists using intersects()
+//				else ()
 				
 			}
 
@@ -109,29 +103,37 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		// TODO - Check NETWORK_PROVIDER for an existing location reading.
 		// Only keep this last reading if it is fresh - less than 5 minutes old
 
-		
-		
-		
-		mLastLocationReading = null;
-		
+		Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+		if (location != null) {
+
+			if ( location.getTime() > System.currentTimeMillis() - FIVE_MINS) {
+				mLastLocationReading = location;
+				Log.i(TAG, "Latest location from provider is less than 5 minutes old");	
+			}
+		}
 
 		// TODO - register to receive location updates from NETWORK_PROVIDER
-//		mLocationManager.requestLocationUpdates(
-//				LocationManager.NETWORK_PROVIDER, POLLING_FREQ,
-//				MIN_DISTANCE, mLocationListener);
-
+		//
+		// note: PlaceViewActivity implements LocationListener therefore
+		// "this" acts like registering a listener "mLocationListener = new LocationLister()"
 		
-		
+		mLocationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, mMinTime,
+				mMinDistance, this);
+	
 	}
 
 	@Override
 	protected void onPause() {
 
 		// TODO - unregister for location updates
+		//
+		// note: PlaceViewActivity implements LocationListener therefore
+		// "this" acts like registering a listener "mLocationListener = new LocationLister()"
 
-		mLocationManager.removeUpdates(mLocationListener);
-		
-		
+		mLocationManager.removeUpdates(this);
+			
 		shutdownMockLocationManager();
 		super.onPause();
 	}
@@ -176,26 +178,33 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		
 		
 	}
-
+	
 	// LocationListener methods
+	// "this method is called when the location changes"
 	@Override
 	public void onLocationChanged(Location currentLocation) {
 
 		// TODO - Update last location considering the following cases.
+		
 		// 1) If there is no last location, set the last location to the current
 		// location.
+		if (mLastLocationReading == null) {
+
+			mLastLocationReading = currentLocation;
+
+		}	
+			
 		// 2) If the current location is older than the last location, ignore
 		// the current location
+		
+		
 		// 3) If the current location is newer than the last locations, keep the
 		// current location.
 
+
 		
 		
-		
-		
-		
-		
-		mLastLocationReading = null;
+		//mLastLocationReading = null;
 		
 	}
 
@@ -213,6 +222,8 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// not implemented
 	}
+	
+
 
 	// Returns age of location in milliseconds
 	private long ageInMilliseconds(Location location) {
