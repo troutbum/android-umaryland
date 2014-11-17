@@ -22,7 +22,7 @@ public class LoggingServiceClient extends Activity {
 				Intent startServiceIntent = new Intent(getApplicationContext(),
 						LoggingService.class);
 
-				// Put Logging message in intent
+				// Put Logging message in intent (EXTRA TO BE USED AS THE MESSAGE)
 				startServiceIntent.putExtra(LoggingService.EXTRA_LOG,
 						"Log this message");
 

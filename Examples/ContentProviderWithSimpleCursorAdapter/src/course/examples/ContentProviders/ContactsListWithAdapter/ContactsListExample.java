@@ -27,7 +27,7 @@ public class ContactsListExample extends ListActivity {
 		String sortOrder = Contacts._ID + " ASC";
 
 		// query contacts ContentProvider
-		Cursor cursor = contentResolver.query(Contacts.CONTENT_URI,
+		Cursor cursor = contentResolver.query(Contacts.CONTENT_URI,    //cursor allows iteration of this query data
 				columnsToExtract, whereClause, null, sortOrder);
 
 		// pass cursor to custom list adapter

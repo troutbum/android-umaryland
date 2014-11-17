@@ -18,11 +18,11 @@ public class ContactsListExample extends ListActivity implements
 		super.onCreate(savedInstanceState);
 
 		// Create and set empty adapter
-		mAdapter = new ContactInfoListAdapter(this, R.layout.list_item, null, 0);
+		mAdapter = new ContactInfoListAdapter(this, R.layout.list_item, null, 0);  // no data at this point
 		setListAdapter(mAdapter);
 
 		// Initialize the loader
-		getLoaderManager().initLoader(0, null, this);
+		getLoaderManager().initLoader(0, null, this);  // id0, no params, callback "this"
 
 	}
 
@@ -44,15 +44,15 @@ public class ContactsListExample extends ListActivity implements
 		// String used for defining the sort order
 		String sortOrder = Contacts._ID + " ASC";
 
-		return new CursorLoader(this, Contacts.CONTENT_URI, CONTACTS_ROWS,
-				select, null, sortOrder);
+		return new CursorLoader(this, Contacts.CONTENT_URI, CONTACTS_ROWS,     // creates new CursorLoader with this query
+				select, null, sortOrder);									   // performed on a background thread
 	}
 
 	// Called when the Loader has finished loading its data
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-		// Swap the new cursor into the List adapter
+		// Swap the new cursor into the List adapter  (PUTS INTO LIST ADAPTER)
 		mAdapter.swapCursor(data);
 
 	}

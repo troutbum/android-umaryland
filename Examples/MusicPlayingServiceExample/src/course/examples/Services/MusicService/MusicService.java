@@ -21,7 +21,7 @@ public class MusicService extends Service {
 	public void onCreate() {
 		super.onCreate();
 
-		// Set up the Media Player
+		// Set up the Media Player  
 		mPlayer = MediaPlayer.create(this, R.raw.badnews);
 
 		if (null != mPlayer) {
@@ -43,7 +43,7 @@ public class MusicService extends Service {
 		}
 
 		// Create a notification area notification so the user 
-		// can get back to the MusicServiceClient
+		// can get back to the MusicServiceClient (ALLOWS CLIENT TO CLOSE, THEN RETURN CLIENT TO STOP SVC)
 		
 		final Intent notificationIntent = new Intent(getApplicationContext(),
 				MusicServiceClient.class);
@@ -58,7 +58,7 @@ public class MusicService extends Service {
 				.setContentIntent(pendingIntent).build();
 
 		// Put this Service in a foreground state, so it won't 
-		// readily be killed by the system  
+		// readily be killed by the system  (FOREGROUND STATE, LESS LIKELY TO BE KILLED IF RESOURCES LOW)
 		startForeground(NOTIFICATION_ID, notification);
 
 	}
@@ -86,7 +86,7 @@ public class MusicService extends Service {
 
 		}
 
-		// Don't automatically restart this Service if it is killed
+		// Don't automatically restart this Service if it is killed  ANDROID SHOULD NOT RESTART IF KILLED
 		return START_NOT_STICKY;
 	}
 

@@ -178,22 +178,8 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		// Do not add the PlaceBadge to the adapter
 
 		// Otherwise - add the PlaceBadge to the adapter
-
-
-
-		// check if place record already exists
-
-		//		NEED TO CLEAN CHECK LOGIC		
-		//		if (place.intersects(mLastLocationReading) == true) {
-		//
-		//			Toast.makeText(getBaseContext(), "You already have this location badge.",
-		//					Toast.LENGTH_LONG).show();
-		//			Log.i(TAG, "Toasted: You already have this location badge.");
-		//			return;
-		//		}
-
 		
-		// check if PlaceBadge for location does not exist
+		// check if PlaceBadge can be acquired
 		if (place.getPlace() == null) {
 			Toast.makeText(getBaseContext(), "PlaceBadge could not be acquired.",
 					Toast.LENGTH_LONG).show();

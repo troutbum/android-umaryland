@@ -45,15 +45,15 @@ public class DisplayActivity extends ListActivity implements
 		super.onCreate(savedInstanceState);
 
 		// Get Account information
-		// Must have a Google account set up on your device
+		// Must have a Google account set up on your device  (GETS ACCOUNTS REGISTERED ON DEVICE)
 		mAccountList = AccountManager.get(this).getAccountsByType("com.google");
 		mType = mAccountList[0].type;
 		mName = mAccountList[0].name;
 
-		// Insert new contacts
+		// Insert new contacts  (ADD LARRY,STEVE...)
 		insertAllNewContacts();
 
-		// Create and set empty list adapter
+		// Create and set empty list adapter (SETUP CURSOR LOADER AND DISPLAY ALL CONTACTS)
 		mAdapter = new SimpleCursorAdapter(this, R.layout.list_layout, null,
 				columnsToDisplay, resourceIds, 0);
 		setListAdapter(mAdapter);
@@ -75,7 +75,7 @@ public class DisplayActivity extends ListActivity implements
 
 		try {
 
-			// Apply all batched operations
+			// Apply all batched operations  (COMMITS ADD ALL CONTACTS)
 			getContentResolver().applyBatch(ContactsContract.AUTHORITY,
 					batchOperation);
 

@@ -19,13 +19,13 @@ public class CustomContactProviderDemo extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ContentResolver contentResolver = getContentResolver();
+		ContentResolver contentResolver = getContentResolver();  // REFERENCE TO RESOLVER
 
-		ContentValues values = new ContentValues();
+		ContentValues values = new ContentValues();  // CONTENT VALUES OBJECT
 
-		// Insert first record
+		// Insert first record  (INTO CONTENT PROVIDER)
 		values.put(DataContract.DATA, "Record1");
-		Uri firstRecordUri = contentResolver.insert(DataContract.CONTENT_URI, values);
+		Uri firstRecordUri = contentResolver.insert(DataContract.CONTENT_URI, values);  //INSERT
 
 		values.clear();
 

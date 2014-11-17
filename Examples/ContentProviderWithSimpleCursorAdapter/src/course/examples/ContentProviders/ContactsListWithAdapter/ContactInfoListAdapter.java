@@ -38,33 +38,33 @@ public class ContactInfoListAdapter extends ResourceCursorAdapter {
 
 	}
 
-	// Create and return a new contact data view
+	// Create and return a new contact data view  (NEW VIEW)
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		return inflater.inflate(R.layout.list_item, parent, false);
+		return inflater.inflate(R.layout.list_item, parent, false);  // NEW VIEW FROM XML RESOURCE
 
 	}
 
-	// Update and return a contact data view
+	// Update and return a contact data view  (BIND DATA TO VIEW)
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 
-		TextView textView = (TextView) view.findViewById(R.id.name);
+		TextView textView = (TextView) view.findViewById(R.id.name);    // PUT CONTACT NAME IN A TEXTVIEW
 		textView.setText(cursor.getString(cursor
 				.getColumnIndex(Contacts.DISPLAY_NAME)));
 
 		// Default photo
-		BitmapDrawable photoBitmap = mNoPictureBitmap;
+		BitmapDrawable photoBitmap = mNoPictureBitmap;     // REFERENCE TO A DEFAULT PHOTO
 
 		// Get actual thumbnail photo if it exists
-		String photoContentUri = cursor.getString(cursor
+		String photoContentUri = cursor.getString(cursor             //CHECK FOR ACTUAL PHOTO
 				.getColumnIndex(Contacts.PHOTO_THUMBNAIL_URI));
 
-		if (null != photoContentUri) {
+		if (null != photoContentUri) {						
 
 			InputStream input = null;
 
@@ -76,7 +76,7 @@ public class ContactInfoListAdapter extends ResourceCursorAdapter {
 
 				if (input != null) {
 
-					photoBitmap = new BitmapDrawable(
+					photoBitmap = new BitmapDrawable(						//STORES PHOTO INPUT DATA INTO VARIABLE			
 							mApplicationContext.getResources(), input);
 					photoBitmap.setBounds(0, 0, mBitmapSize, mBitmapSize);
 

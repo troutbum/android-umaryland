@@ -10,13 +10,13 @@ import android.util.SparseArray;
 // Note: Currently, this data does not persist across device reboot
 public class StringsContentProvider extends ContentProvider {
 
-	// Data storage 
+	// Data storage (SIMPLE DATA STRUCTURE, NOT A DB)
 	private static final SparseArray<DataRecord> db = new SparseArray<DataRecord>();
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "StringsContentProvider";
 
-	// Delete some or all data items
+	// Delete some or all data items (DELETE, NOT SQL)
 	@Override
 	public synchronized int delete(Uri uri, String selection,
 			String[] selectionArgs) {
@@ -42,7 +42,7 @@ public class StringsContentProvider extends ContentProvider {
 			}
 		}
 		
-		//return number of items deleted
+		//return number of items deleted (RETURN)
 		return numRecordsRemoved;
 	}
 
@@ -61,7 +61,7 @@ public class StringsContentProvider extends ContentProvider {
 		return contentType;
 	}
 
-	// Insert specified value into ContentProvider
+	// Insert specified value into ContentProvider (INSERT A DATA RECORD)
 	@Override
 	public synchronized Uri insert(Uri uri, ContentValues value) {
 
@@ -71,7 +71,7 @@ public class StringsContentProvider extends ContentProvider {
 			DataRecord dataRecord = new DataRecord(value.getAsString(DataContract.DATA));
 			db.put(dataRecord.getID(), dataRecord);
 
-			// return Uri associated with newly-added data item
+			// return Uri associated with newly-added data item (URI FOR RETRIEVAL)
 			return Uri.withAppendedPath(DataContract.CONTENT_URI,
 					String.valueOf(dataRecord.getID()));
 
@@ -87,7 +87,7 @@ public class StringsContentProvider extends ContentProvider {
 	public synchronized Cursor query(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
 
-		// Create simple cursor
+		// Create simple cursor (RETURN ALL THE DATA FOR EACH RECORD)
 		MatrixCursor cursor = new MatrixCursor(DataContract.ALL_COLUMNS);
 
 		if (isTableUri(uri)) {
@@ -123,7 +123,7 @@ public class StringsContentProvider extends ContentProvider {
 	}
 
 	// Initialize ContentProvider 
-	// Nothing to do in this case
+	// Nothing to do in this case  (NOTHING NEEDED IN THIS SIMPLE CASE)
 	@Override
 	public boolean onCreate() {
 		return true;
