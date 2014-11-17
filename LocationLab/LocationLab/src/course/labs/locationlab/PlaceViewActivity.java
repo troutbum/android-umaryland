@@ -236,7 +236,6 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		}	
 			
 		// 2) If the current location is older than the last location, ignore
-<<<<<<< HEAD
 		// the current location	
 		if (currentLocation.getTime() < mLastLocationReading.getTime()) {
 			// do nothing?
@@ -249,18 +248,6 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 			mLastLocationReading = currentLocation;
 		}
 		
-		//mLastLocationReading = null; (SKELETON)
-=======
-		// the current location
-		// 3) If the current location is newer than the last locations, keep the
-		// current location.
-
-		
-		
-		
-		
-		mLastLocationReading = null;
->>>>>>> FETCH_HEAD
 		
 	}
 
