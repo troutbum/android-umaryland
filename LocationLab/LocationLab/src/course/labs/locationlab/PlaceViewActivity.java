@@ -85,37 +85,30 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 					Toast.makeText(getBaseContext(), "No Current Location is Available.",
 							Toast.LENGTH_LONG).show();
 					Log.i(TAG, "Toasted: No Current Location is Available");
+					return;
 				}
 
-				else {					
-//					// Check if PlaceBadge exists using intersects()
-//					for (int i=0; i < mAdapter.getCount(); ++i) {
-//						if (((PlaceViewAdapter) mAdapter.getItem(i)).intersects(mLastLocationReading)) {
-//							Toast.makeText(getBaseContext(), "You already have this location badge.",
-//									Toast.LENGTH_LONG).show();
-//							//return;
-//						}
-//						else {
-//							// Tricky AsyncTask syntax - see Notifications Lab
-//							// doInBackground method accessed via .execute()
-//							
-//							new PlaceDownloaderTask(PlaceViewActivity.this, sHasNetwork).execute(mLastLocationReading);										
-//							Log.i(TAG, "Downloading a PlaceRecord via AsyncTask");
-//
-//							//	this does not work:					
-//							//		PlaceDownloaderTask mPlaceDownloaderTask = 
-//							//			new PlaceDownloaderTask(PlaceViewActivity.this, mMockLocationOn);					
-//							//		PlaceRecord mPlaceRecord = mPlaceDownloaderTask.doInBackground(mLastLocationReading);
-//
-//						}
-//					}
-
-					new PlaceDownloaderTask(PlaceViewActivity.this, sHasNetwork).execute(mLastLocationReading);										
-					Log.i(TAG, "Downloading a PlaceRecord via AsyncTask");
-					
+				// Check if PlaceBadge exists using intersects() method
+				for (int i = 0; i < mAdapter.getCount(); i++) {
+					if ((((PlaceRecord) mAdapter.getItem(i)).intersects(mLastLocationReading)) == true) {
+						Toast.makeText(getBaseContext(), "You already have this location badge.",
+								Toast.LENGTH_LONG).show();
+						Log.i(TAG, "Toasted: You already have this location badge.");
+						return;
+					}
 				}
+
+				// Start a AsyncTask to download Place data from geonames.org
+				// Tricky syntax (see Notifications Lab) - doInBackground method accessed via .execute()
+				new PlaceDownloaderTask(PlaceViewActivity.this, sHasNetwork).execute(mLastLocationReading);										
+				Log.i(TAG, "Downloading a PlaceRecord via AsyncTask");
+
+				//	this does not work:					
+				//		PlaceDownloaderTask mPlaceDownloaderTask = 
+				//			new PlaceDownloaderTask(PlaceViewActivity.this, mMockLocationOn);					
+				//		PlaceRecord mPlaceRecord = mPlaceDownloaderTask.doInBackground(mLastLocationReading);
+
 			}
-			
 		});
 
 		placesListView.addFooterView(footerView);
@@ -123,7 +116,20 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		setListAdapter(mAdapter);
 
 	}
+		//					// Check if PlaceBadge exists using intersects()
+		//					for (int i=0; i < mAdapter.getCount(); ++i) {
+		//						if (((PlaceViewAdapter) mAdapter.getItem(i)).intersects(mLastLocationReading)) {
+		//							Toast.makeText(getBaseContext(), "You already have this location badge.",
+		//									Toast.LENGTH_LONG).show();
+		//							//return;
 
+		//					for (int i = 0; i < mAdapter.getCount(); i++) {
+		//						String data = ((PlaceRecord) mAdapter.getItem(i)).getPlace();
+		//						Log.i(TAG,	"Place" + i + ": " + data + ",");
+		//					}
+		
+		
+		
 	@Override
 	protected void onResume() {
 		super.onResume();

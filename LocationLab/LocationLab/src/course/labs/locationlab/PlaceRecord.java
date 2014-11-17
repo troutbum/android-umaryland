@@ -2,6 +2,7 @@ package course.labs.locationlab;
 
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.util.Log;
 
 public class PlaceRecord {
 	private String mFlagUrl;
@@ -9,6 +10,7 @@ public class PlaceRecord {
 	private String mPlaceName;
 	private Bitmap mFlagBitmap;
 	private Location mLocation;
+	private static final String TAG = "Lab-Location";
 
 	public PlaceRecord(String flagUrl, String country, String place) {
 		this.mFlagUrl = flagUrl;
@@ -65,6 +67,7 @@ public class PlaceRecord {
 	
 	boolean intersects(Location location) {
 		double tolerance = 1000;
+		Log.i(TAG, "Entered intersects()");
 		return (mLocation.distanceTo(location) <= tolerance);
 	}
 
