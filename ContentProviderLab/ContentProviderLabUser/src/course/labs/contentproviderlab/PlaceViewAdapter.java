@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,8 @@ import android.widget.TextView;
 import course.labs.contentproviderlab.provider.PlaceBadgesContract;
 
 public class PlaceViewAdapter extends CursorAdapter {
-
+	
+	private static String TAG = "Lab-ContentProvider";
 	private static final String APP_DIR = "ContentProviderLab/Badges";
 	private ArrayList<PlaceRecord> mPlaceRecords = new ArrayList<PlaceRecord>();
 	private static LayoutInflater sLayoutInflater = null;
@@ -62,17 +64,26 @@ public class PlaceViewAdapter extends CursorAdapter {
 		// getPlaceRecordFromCursor() method as you add the
 		// cursor's places to the list
 
+		super.swapCursor(newCursor); 
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+		if (newCursor != null) {
+			
+			// clear ArrayList
+			mPlaceRecords.clear();
+			
+			try {
+				while (newCursor.moveToNext()) {
+					Log.i(TAG, "Populating mPlaceRecords ArrayList from Content Provider") ;
+					mPlaceRecords.add(getPlaceRecordFromCursor(newCursor));
+				}
+			} catch (Exception e) {
+				Log.i(TAG, "" + e.getMessage());
+			} 
+		}
+		
+		super.swapCursor(newCursor);
+		
+		return super.swapCursor(newCursor); // need to understand this method better
 
 	}
 
@@ -142,17 +153,17 @@ public class PlaceViewAdapter extends CursorAdapter {
 
 			// TODO - Insert new record into the ContentProvider
 
+			values.put(PlaceBadgesContract.FLAG_BITMAP_PATH, listItem.getFlagBitmapPath());
+			values.put(PlaceBadgesContract.COUNTRY_NAME, listItem.getCountryName());
+			values.put(PlaceBadgesContract.PLACE_NAME, listItem.getPlace());
+			values.put(PlaceBadgesContract.LAT, listItem.getLocation().getLatitude());
+			values.put(PlaceBadgesContract.LON, listItem.getLocation().getLongitude());
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        }
+			mContext.getContentResolver().insert(PlaceBadgesContract.CONTENT_URI, values);
+
+			Log.i(TAG,"Finish ContentResolver insertion of Place Record");
+
+		}
 
 	}
 
@@ -164,8 +175,10 @@ public class PlaceViewAdapter extends CursorAdapter {
 		mPlaceRecords.clear();
 
 		// TODO - delete all records in the ContentProvider
-
-        
+		
+		// use content resolver's delete() method and pass it the URI.
+		// to delete all the rows
+		mContext.getContentResolver().delete(PlaceBadgesContract.CONTENT_URI, null, null);  
         
 	}
 
