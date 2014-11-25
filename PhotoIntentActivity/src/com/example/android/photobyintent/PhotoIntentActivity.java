@@ -27,6 +27,7 @@ import android.widget.VideoView;
 
 public class PhotoIntentActivity extends Activity {
 
+	private static final String TAG = "photoByIntent";
 	private static final int ACTION_TAKE_PHOTO_B = 1;
 	private static final int ACTION_TAKE_PHOTO_S = 2;
 	private static final int ACTION_TAKE_VIDEO = 3;
@@ -91,6 +92,9 @@ public class PhotoIntentActivity extends Activity {
 		
 		File f = createImageFile();
 		mCurrentPhotoPath = f.getAbsolutePath();
+		
+		Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+		//Results in /storage/sdcard/Pictures/CameraSample/IMG_....jpg
 		
 		return f;
 	}

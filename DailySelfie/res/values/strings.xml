@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="btnIntend">Take Picture</string>
     <string name="cannot">Cannot</string>
+    <string name="album_name">Selfies</string>
 
 </resources>

@@ -32,6 +32,9 @@ public class MainActivity extends Activity {
 	private Bitmap mImageBitmap;
 	String mCurrentPhotoPath;
 	static final int REQUEST_TAKE_PHOTO = 1;
+	private static final String JPEG_FILE_PREFIX = "IMG_";
+	private static final String JPEG_FILE_SUFFIX = ".jpg";
+	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
 	// Create Intent to take picture
 	private void dispatchTakePictureIntent() {
@@ -51,7 +54,8 @@ public class MainActivity extends Activity {
 	        if (photoFile != null) {
 	        	// puts complete image into file system
 	            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-	                    Uri.fromFile(photoFile));
+	                    Uri.fromFile(photoFile));            
+	            Log.i(TAG, "photoFile URI = " + Uri.fromFile(photoFile));
 	            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
 	        }
 	    }
@@ -62,6 +66,7 @@ public class MainActivity extends Activity {
 			new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			Log.i(TAG, "onClick dispatchTakePictureIntent");
 			dispatchTakePictureIntent();
 		}
 	};
@@ -116,14 +121,21 @@ public class MainActivity extends Activity {
 	// result of Intent is returned as a bitmap
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	   Log.i(TAG, "entered onActivityResult");	   
-	   Log.i(TAG, "requestCode = " + requestCode + "resultCode = " + resultCode);
+	   Log.i(TAG, "entered onActivityResult");	      
 		if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+			//
+			Log.i(TAG, "requestCode = " + requestCode + "resultCode = " + resultCode);
+			//
 	        Bundle extras = data.getExtras();
-	        Log.i(TAG, "past extras = data.getExtras()");
+	        // BLOWS UP HERE!
+	        Log.i(TAG, "got past extras = data.getExtras()");
+	        //
 	        Bitmap imageBitmap = (Bitmap) extras.get("data");
+	        //
 	        Log.i(TAG, "past imageBitmap = extras.get(data)");
+	        //
 	        mImageView.setImageBitmap(imageBitmap);
+	        //
 	        Log.i(TAG, "past setImageBitmap");
 	    }
 	    
@@ -135,26 +147,73 @@ public class MainActivity extends Activity {
 	    
 	}
 	
-	// Create file to store image with unique file path using timestamp
+//	// Create file to store image with unique file path using timestamp
+//	private File createImageFile() throws IOException {
+//	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//	    String imageFileName = "JPEG_" + timeStamp + "_";
+//	    //
+//	    Log.i(TAG, "imageFileName = " + imageFileName);
+//	    //
+//	    // store in public directory, all apps can acccess
+//	    File storageDir = Environment.getExternalStoragePublicDirectory(
+//	            Environment.DIRECTORY_PICTURES);
+//	    File image = File.createTempFile(
+//	        imageFileName,  /* prefix */
+//	        ".jpg",         /* suffix */
+//	        storageDir      /* directory */
+//	    );
+//
+//	    // Save a file: path for use with ACTION_VIEW intents
+//	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+//	    //
+//	    Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+//	    
+//	    return image;
+//	}
+	
 	private File createImageFile() throws IOException {
-	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-	    String imageFileName = "JPEG_" + timeStamp + "_";
-	    // store in publicly, all apps can acccess
-	    File storageDir = Environment.getExternalStoragePublicDirectory(
-	            Environment.DIRECTORY_PICTURES);
-	    File image = File.createTempFile(
-	        imageFileName,  /* prefix */
-	        ".jpg",         /* suffix */
-	        storageDir      /* directory */
-	    );
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+		File albumF = getAlbumDir();
+		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
+		return imageF;
+	}
 
-	    // Save a file: path for use with ACTION_VIEW intents
-	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-	    return image;
+
+	private File setUpPhotoFile() throws IOException {
+
+		File f = createImageFile();
+		mCurrentPhotoPath = f.getAbsolutePath();
+
+		return f;
+	}
+	
+	/* Photo album for this application */
+	private String getAlbumName() {
+		return getString(R.string.album_name);
+	}
+	
+	private File getAlbumDir() {
+		File storageDir = null;
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {		
+			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
+			if (storageDir != null) {
+				if (! storageDir.mkdirs()) {
+					if (! storageDir.exists()){
+						Log.d("CameraSample", "failed to create directory");
+						return null;
+					}
+				}
+			}
+			
+		} else {
+			Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
+		}	
+		return storageDir;
 	}
 	
 	
-	/** Called when the activity is first created. */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
