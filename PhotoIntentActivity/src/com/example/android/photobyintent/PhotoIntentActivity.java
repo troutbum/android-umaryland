@@ -54,7 +54,6 @@ public class PhotoIntentActivity extends Activity {
 	private String getAlbumName() {
 		return getString(R.string.album_name);
 	}
-
 	
 	private File getAlbumDir() {
 		File storageDir = null;
@@ -107,6 +106,7 @@ public class PhotoIntentActivity extends Activity {
 		/* Get the size of the ImageView */
 		int targetW = mImageView.getWidth();
 		int targetH = mImageView.getHeight();
+		Log.i(TAG, "targetW = "+targetW+" targetH ="+targetH);
 
 		/* Get the size of the image */
 		BitmapFactory.Options bmOptions = new BitmapFactory.Options();

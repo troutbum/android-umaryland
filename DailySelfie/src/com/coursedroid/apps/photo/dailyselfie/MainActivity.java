@@ -59,6 +59,10 @@ public class MainActivity extends Activity {
 //			startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
 //		}     
 //	}
+	
+	/*
+	 *  DISPATCH INTENT TO TAKE PICTURE
+	 */
 	private void dispatchTakePictureIntent(int actionCode) {
 		Log.i(TAG, "entered dispatchTakePictureIntent");
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -68,10 +72,9 @@ public class MainActivity extends Activity {
 			File f = null;
 			
 			try {
-				Log.i(TAG, "before f=setUpPhotoFile()");
 				f = setUpPhotoFile();
 				mCurrentPhotoPath = f.getAbsolutePath();
-				Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+				Log.i(TAG, "dispatchTakePictureIntent.mCurrentPhotoPath = " + mCurrentPhotoPath);
 				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -83,12 +86,11 @@ public class MainActivity extends Activity {
 		default:
 			break;			
 		} // switch
-		
-		Log.i(TAG, "entered dispatchTakePictureIntent");
+			
 		startActivityForResult(takePictureIntent, actionCode);
+		Log.i(TAG, "Exiting dispatchTakePictureIntent()");
 	}	
-	
-	
+		
 	
 	// Setup button listener to take picture
 	Button.OnClickListener mTakePicOnClickListener = 
@@ -111,9 +113,13 @@ public class MainActivity extends Activity {
 	
 	// Resizes the taken photo to the ImageView
 	private void setPic() {
+		
+		Log.i(TAG, "entered setPic()");
+		
 	    // Get the dimensions of the View
 	    int targetW = mImageView.getWidth();
-	    int targetH = mImageView.getHeight();
+	    int targetH = mImageView.getHeight();    
+	    Log.i(TAG, "targetW = "+targetW+" targetH ="+targetH);
 
 	    // Get the dimensions of the bitmap
 	    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -122,17 +128,27 @@ public class MainActivity extends Activity {
 	    int photoW = bmOptions.outWidth;
 	    int photoH = bmOptions.outHeight;
 
-	    // Determine how much to scale down the image
-	    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+		/* Figure out which way needs to be reduced less 
+		 * Sample code differs here from web example
+		 * causing crash
+		 * */
+		int scaleFactor = 1;
+		if ((targetW > 0) || (targetH > 0)) {
+			scaleFactor = Math.min(photoW/targetW, photoH/targetH);	
+		}
 
 	    // Decode the image file into a Bitmap sized to fill the View
 	    bmOptions.inJustDecodeBounds = false;
 	    bmOptions.inSampleSize = scaleFactor;
 	    bmOptions.inPurgeable = true;
 
+	    /* Decode the JPEG file into a Bitmap */
 	    Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+	    
+	    /* Associate the Bitmap to the ImageView */
 	    mImageView.setImageBitmap(bitmap);
 	    mImageView.setVisibility(View.VISIBLE);
+	    Log.i(TAG, "Exiting setPic()");
 	}
 	
 //	// Create Intent to take picture
@@ -148,67 +164,59 @@ public class MainActivity extends Activity {
 	// in this example.  preview vs final take?
 	
 	// result of Intent is returned as a bitmap
+	
+	/*
+	 * Handle the picture data returned from the takePictureIntent
+	 * 
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	   Log.i(TAG, "entered onActivityResult");	      
 		if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-			//
-			Log.i(TAG, "requestCode = " + requestCode + "resultCode = " + resultCode);
-			//
-	        Bundle extras = data.getExtras();
-	        // BLOWS UP HERE!
-	        Log.i(TAG, "got past extras = data.getExtras()");
-	        //
-	        Bitmap imageBitmap = (Bitmap) extras.get("data");
-	        //
-	        Log.i(TAG, "past imageBitmap = extras.get(data)");
-	        //
-	        mImageView.setImageBitmap(imageBitmap);
-	        //
-	        Log.i(TAG, "past setImageBitmap");
-	    }
-	    
-//	    if (mCurrentPhotoPath != null) {
-//			setPic();
-//			galleryAddPic();
-//			mCurrentPhotoPath = null;
-//		}
-	    
+
+			handleBigCameraPhoto();
+			
+	    }    
 	}
 	
-//	// Create file to store image with unique file path using timestamp
-//	private File createImageFile() throws IOException {
-//	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//	    String imageFileName = "JPEG_" + timeStamp + "_";
-//	    //
-//	    Log.i(TAG, "imageFileName = " + imageFileName);
-//	    //
-//	    // store in public directory, all apps can acccess
-//	    File storageDir = Environment.getExternalStoragePublicDirectory(
-//	            Environment.DIRECTORY_PICTURES);
-//	    File image = File.createTempFile(
-//	        imageFileName,  /* prefix */
-//	        ".jpg",         /* suffix */
-//	        storageDir      /* directory */
-//	    );
-//
-//	    // Save a file: path for use with ACTION_VIEW intents
-//	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-//	    //
-//	    Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
-//	    
-//	    return image;
-//	}
+	private void handleBigCameraPhoto() {
+		Log.i(TAG, "entered handleBigCameraPhoto()");	
+		if (mCurrentPhotoPath != null) {		
+			setPic();
+			galleryAddPic();
+			mCurrentPhotoPath = null;
+		}
+
+	}	
+	
+	private void handleSmallCameraPhoto(Intent intent) {
+		
+		Log.i(TAG, "entered handleSmallCameraPhoto()");	
+		Bundle extras = intent.getExtras();
+		mImageBitmap = (Bitmap) extras.get("data");
+		mImageView.setImageBitmap(mImageBitmap);
+		mImageView.setVisibility(View.VISIBLE);
+	}
+	
+	
+	
+	/*
+	 *  FILE, DIRECTORY, ALBUM CREATION METHODS
+	 */
 	
 	private File createImageFile() throws IOException {
 		// Create an image file name
+		Log.i(TAG, "entered createImageFile()");
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		Log.i(TAG, "past timeStamp");
 		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+		Log.i(TAG, "imageFileName =" + imageFileName);
 		File albumF = getAlbumDir();
+		Log.i(TAG, "past getAlbumDir()");
 		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
+		Log.i(TAG, "Exiting createImageFile()");
 		return imageF;
 	}
-
 
 	private File setUpPhotoFile() throws IOException {
 
@@ -216,23 +224,24 @@ public class MainActivity extends Activity {
 		File f = createImageFile();
 		Log.i(TAG, "past f = createImageFile()");
 		mCurrentPhotoPath = f.getAbsolutePath();
-		Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+		Log.i(TAG, "Exiting setUpPhotoFile():  mCurrentPhotoPath = " + mCurrentPhotoPath);
 		return f;
 	}
 	
-	/* Photo album for this application */
 	private String getAlbumName() {
 		return getString(R.string.album_name);
 	}
 	
 	private File getAlbumDir() {
+		Log.i(TAG, "entered getAlbumDir()");
 		File storageDir = null;
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {		
 			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
+			Log.i(TAG, "storageDir = " + storageDir);
 			if (storageDir != null) {
 				if (! storageDir.mkdirs()) {
 					if (! storageDir.exists()){
-						Log.d("CameraSample", "failed to create directory");
+						Log.i(TAG, "Failed to create album directory");
 						return null;
 					}
 				}
@@ -241,6 +250,8 @@ public class MainActivity extends Activity {
 		} else {
 			Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
 		}	
+		
+		Log.i(TAG, "Exiting getAlbumDir()");
 		return storageDir;
 	}
 	
@@ -249,18 +260,21 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		mImageView = (ImageView) findViewById(R.id.imageView1);
 		mImageBitmap = null;
-		
+
 		Button picBtn = (Button) findViewById(R.id.btnIntend);
 		setBtnListenerOrDisable( 
 				picBtn, 
 				mTakePicOnClickListener,
 				MediaStore.ACTION_IMAGE_CAPTURE
-		);
-		
-		
+				);
+
+		// This bug really hung me up until I stepped through the code
+		// compiles without this but results in run-time crash
+		mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+
 	}
 
 	@Override
