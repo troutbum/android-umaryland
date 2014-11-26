@@ -34,32 +34,61 @@ public class MainActivity extends Activity {
 	static final int REQUEST_TAKE_PHOTO = 1;
 	private static final String JPEG_FILE_PREFIX = "IMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
+	private static final int ACTION_TAKE_PHOTO_B = 1;
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
 	// Create Intent to take picture
-	private void dispatchTakePictureIntent() {
-	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    // Ensure that there's a camera activity to handle the intent
-	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-	        // Create the File where the photo should go
-	        File photoFile = null;
-	        try {
-	            photoFile = createImageFile();
-	        } catch (IOException ex) {
-	            Toast.makeText(getApplicationContext(),
-	            		"Error trying to create image file",
-	            		Toast.LENGTH_LONG).show();;
-	        }
-	        // Continue only if the File was successfully created
-	        if (photoFile != null) {
-	        	// puts complete image into file system
-	            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-	                    Uri.fromFile(photoFile));            
-	            Log.i(TAG, "photoFile URI = " + Uri.fromFile(photoFile));
-	            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-	        }
-	    }
-	}
+//	private void dispatchTakePictureIntent() {
+//		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//		// Ensure that there's a camera activity to handle the intent
+//		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//			// Create the File where the photo should go
+//			File f = null;
+//			try {
+//				f = setUpPhotoFile();
+//				mCurrentPhotoPath = f.getAbsolutePath();
+//				Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+//				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));			
+//
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				f = null;
+//				mCurrentPhotoPath = null;
+//			}
+//			// Continue only if the File was successfully created
+//			startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//		}     
+//	}
+	private void dispatchTakePictureIntent(int actionCode) {
+		Log.i(TAG, "entered dispatchTakePictureIntent");
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		
+		switch(actionCode) {
+		case ACTION_TAKE_PHOTO_B:
+			File f = null;
+			
+			try {
+				Log.i(TAG, "before f=setUpPhotoFile()");
+				f = setUpPhotoFile();
+				mCurrentPhotoPath = f.getAbsolutePath();
+				Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
+				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			} catch (IOException e) {
+				e.printStackTrace();
+				f = null;
+				mCurrentPhotoPath = null;
+			}
+			break;
+
+		default:
+			break;			
+		} // switch
+		
+		Log.i(TAG, "entered dispatchTakePictureIntent");
+		startActivityForResult(takePictureIntent, actionCode);
+	}	
+	
+	
 	
 	// Setup button listener to take picture
 	Button.OnClickListener mTakePicOnClickListener = 
@@ -67,7 +96,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			Log.i(TAG, "onClick dispatchTakePictureIntent");
-			dispatchTakePictureIntent();
+			dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
 		}
 	};
 	
@@ -183,9 +212,11 @@ public class MainActivity extends Activity {
 
 	private File setUpPhotoFile() throws IOException {
 
+		Log.i(TAG, "entered setUpPhotoFile()");
 		File f = createImageFile();
+		Log.i(TAG, "past f = createImageFile()");
 		mCurrentPhotoPath = f.getAbsolutePath();
-
+		Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
 		return f;
 	}
 	
