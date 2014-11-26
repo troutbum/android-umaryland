@@ -36,29 +36,6 @@ public class MainActivity extends Activity {
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
 	private static final int ACTION_TAKE_PHOTO_B = 1;
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
-
-	// Create Intent to take picture
-//	private void dispatchTakePictureIntent() {
-//		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//		// Ensure that there's a camera activity to handle the intent
-//		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//			// Create the File where the photo should go
-//			File f = null;
-//			try {
-//				f = setUpPhotoFile();
-//				mCurrentPhotoPath = f.getAbsolutePath();
-//				Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
-//				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));			
-//
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//				f = null;
-//				mCurrentPhotoPath = null;
-//			}
-//			// Continue only if the File was successfully created
-//			startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-//		}     
-//	}
 	
 	/*
 	 *  DISPATCH INTENT TO TAKE PICTURE
@@ -91,7 +68,6 @@ public class MainActivity extends Activity {
 		Log.i(TAG, "Exiting dispatchTakePictureIntent()");
 	}	
 		
-	
 	// Setup button listener to take picture
 	Button.OnClickListener mTakePicOnClickListener = 
 			new Button.OnClickListener() {
@@ -152,16 +128,16 @@ public class MainActivity extends Activity {
 	}
 	
 	/*
-	 * Handle the picture data returned from the takePictureIntent
-	 * 
+	 * onActivityResults
+	 * handles the picture data returned from the takePictureIntent
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	   Log.i(TAG, "entered onActivityResult");	      
 		if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-
 			handleBigCameraPhoto();
-			
+			//crashes because Intent invoke paramaters differ for big or small
+			//handleSmallCameraPhoto(data);		
 	    }    
 	}
 	
@@ -172,18 +148,20 @@ public class MainActivity extends Activity {
 			galleryAddPic();
 			mCurrentPhotoPath = null;
 		}
-
 	}	
 	
 	private void handleSmallCameraPhoto(Intent intent) {
 		
 		Log.i(TAG, "entered handleSmallCameraPhoto()");	
 		Bundle extras = intent.getExtras();
+		Log.i(TAG, "past intent.getExtras()");	
 		mImageBitmap = (Bitmap) extras.get("data");
+		Log.i(TAG, "past extras.get('data')");	
 		mImageView.setImageBitmap(mImageBitmap);
+		Log.i(TAG, "past setImageBitmap(mImageBitmap)");	
 		mImageView.setVisibility(View.VISIBLE);
+		Log.i(TAG, "Exiting handleSmallCameraPhoto()");		
 	}
-	
 	
 	
 	/*
@@ -247,7 +225,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mImageView = (ImageView) findViewById(R.id.imageView1);
+		//mImageView = (ImageView) findViewById(R.id.imageView1);  pre ListView
+		mImageView = (ImageView) findViewById(R.id.imageView);
 		mImageBitmap = null;
 
 		Button picBtn = (Button) findViewById(R.id.btnIntend);
@@ -319,3 +298,12 @@ public class MainActivity extends Activity {
 	}
 	
 }
+
+// removed from activity_main.xml to build ListView
+// 
+//<ImageView 
+//android:layout_height="wrap_content" 
+//android:layout_width="wrap_content" 
+//android:visibility="visible"
+//android:id="@+id/imageView1" />
+
