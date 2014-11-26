@@ -151,20 +151,6 @@ public class MainActivity extends Activity {
 	    Log.i(TAG, "Exiting setPic()");
 	}
 	
-//	// Create Intent to take picture
-//	private void dispatchTakePictureIntent() {
-//	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//	    // checks to make sure Intent can be handled before starting
-//	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//	    }
-//	}
-	
-	// check usage of REQUEST_IMAGE_CAPTURE vs REQUEST_TAKE_PHOTO
-	// in this example.  preview vs final take?
-	
-	// result of Intent is returned as a bitmap
-	
 	/*
 	 * Handle the picture data returned from the takePictureIntent
 	 * 
