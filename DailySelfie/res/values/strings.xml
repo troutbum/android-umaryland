@@ -8,5 +8,7 @@
     <string name="cannot">Cannot</string>
     <string name="album_name">Selfies</string>
     <string name="imageViewString"></string>
+    <string name="buttonLoadPictures">View Selfies</string>
+    <string name="btnText">View All Selfies</string>
 
 </resources>

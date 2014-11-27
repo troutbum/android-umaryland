@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -23,7 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 
 public class MainActivity extends Activity {
 
@@ -36,30 +37,8 @@ public class MainActivity extends Activity {
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
 	private static final int ACTION_TAKE_PHOTO_B = 1;
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
-
-	// Create Intent to take picture
-//	private void dispatchTakePictureIntent() {
-//		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//		// Ensure that there's a camera activity to handle the intent
-//		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//			// Create the File where the photo should go
-//			File f = null;
-//			try {
-//				f = setUpPhotoFile();
-//				mCurrentPhotoPath = f.getAbsolutePath();
-//				Log.i(TAG, "mCurrentPhotoPath = " + mCurrentPhotoPath);
-//				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));			
-//
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//				f = null;
-//				mCurrentPhotoPath = null;
-//			}
-//			// Continue only if the File was successfully created
-//			startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-//		}     
-//	}
-	
+	private static int RESULT_LOAD_IMAGE = 2;  //action code for Gallery Intent
+		
 	/*
 	 *  DISPATCH INTENT TO TAKE PICTURE
 	 */
@@ -151,32 +130,39 @@ public class MainActivity extends Activity {
 	    Log.i(TAG, "Exiting setPic()");
 	}
 	
-//	// Create Intent to take picture
-//	private void dispatchTakePictureIntent() {
-//	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//	    // checks to make sure Intent can be handled before starting
-//	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//	    }
-//	}
-	
-	// check usage of REQUEST_IMAGE_CAPTURE vs REQUEST_TAKE_PHOTO
-	// in this example.  preview vs final take?
-	
-	// result of Intent is returned as a bitmap
-	
 	/*
-	 * Handle the picture data returned from the takePictureIntent
-	 * 
+	 * Handle Results from Intents
+	 * the picture data returned from the takePictureIntent
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	   Log.i(TAG, "entered onActivityResult");	      
+		
+		Log.i(TAG, "entered onActivityResult");	      
+		
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+			Uri selectedImage = data.getData();
+			String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+			Cursor cursor = getContentResolver().query(selectedImage,
+					filePathColumn, null, null, null);
+			cursor.moveToFirst();
+
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+			String picturePath = cursor.getString(columnIndex);
+			cursor.close();
+
+			ImageView imageView = (ImageView) findViewById(R.id.imageView1);
+			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+		}
+
 		if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
 
 			handleBigCameraPhoto();
-			
-	    }    
+
+		}    
 	}
 	
 	private void handleBigCameraPhoto() {
@@ -197,13 +183,11 @@ public class MainActivity extends Activity {
 		mImageView.setImageBitmap(mImageBitmap);
 		mImageView.setVisibility(View.VISIBLE);
 	}
-	
-	
+		
 	
 	/*
 	 *  FILE, DIRECTORY, ALBUM CREATION METHODS
-	 */
-	
+	 */	
 	private File createImageFile() throws IOException {
 		// Create an image file name
 		Log.i(TAG, "entered createImageFile()");
@@ -263,8 +247,29 @@ public class MainActivity extends Activity {
 
 		mImageView = (ImageView) findViewById(R.id.imageView1);
 		mImageBitmap = null;
-
-//		Take Picture Button		
+		// This bug really hung me up until I stepped through the code
+		// compiles without this but results in run-time crash
+		mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+	
+		
+		// button to View Selfies using Intent to Android Gallery app
+		Button buttonLoadImages = (Button) findViewById(R.id.buttonLoadPictures);
+        buttonLoadImages.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				
+				// use Android Gallery to display photos
+				Intent i = new Intent(
+						Intent.ACTION_PICK,
+						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				
+				startActivityForResult(i, RESULT_LOAD_IMAGE);
+			}
+		});
+		
+		
+		// take picture button launches intent
 //		Button picBtn = (Button) findViewById(R.id.btnIntend);
 //		setBtnListenerOrDisable( 
 //				picBtn, 
@@ -272,12 +277,9 @@ public class MainActivity extends Activity {
 //				MediaStore.ACTION_IMAGE_CAPTURE
 //				);
 
-		// This bug really hung me up until I stepped through the code
-		// compiles without this but results in run-time crash
-		mAlbumStorageDirFactory = new BaseAlbumDirFactory();
-
 	}
 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -285,6 +287,7 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	// Use optionsMenu Custom Icon to dispatchTakePictureIntent
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
