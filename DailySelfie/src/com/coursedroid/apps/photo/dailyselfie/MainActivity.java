@@ -264,12 +264,13 @@ public class MainActivity extends Activity {
 		mImageView = (ImageView) findViewById(R.id.imageView1);
 		mImageBitmap = null;
 
-		Button picBtn = (Button) findViewById(R.id.btnIntend);
-		setBtnListenerOrDisable( 
-				picBtn, 
-				mTakePicOnClickListener,
-				MediaStore.ACTION_IMAGE_CAPTURE
-				);
+//		Take Picture Button		
+//		Button picBtn = (Button) findViewById(R.id.btnIntend);
+//		setBtnListenerOrDisable( 
+//				picBtn, 
+//				mTakePicOnClickListener,
+//				MediaStore.ACTION_IMAGE_CAPTURE
+//				);
 
 		// This bug really hung me up until I stepped through the code
 		// compiles without this but results in run-time crash

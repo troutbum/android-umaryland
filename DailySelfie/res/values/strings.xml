@@ -7,5 +7,6 @@
     <string name="btnIntend">Take Picture</string>
     <string name="cannot">Cannot</string>
     <string name="album_name">Selfies</string>
+    <string name="imageViewString"></string>
 
 </resources>

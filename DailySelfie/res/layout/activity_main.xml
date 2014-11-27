@@ -3,22 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-   <LinearLayout 
-   android:orientation="horizontal"
-   android:layout_height="wrap_content"
-   android:layout_width="match_parent"
-   >
-   	<Button android:text="@string/btnIntend" android:id="@+id/btnIntend"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1" />
-   </LinearLayout>
 
    <ImageView
        android:id="@+id/imageView1"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:contentDescription="&quot;My ImageView&quot;"
+       android:contentDescription="@string/imageViewString"
        android:visibility="visible" />
               
 </LinearLayout>
