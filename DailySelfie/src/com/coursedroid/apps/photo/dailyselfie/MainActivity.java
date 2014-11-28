@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -39,7 +42,11 @@ public class MainActivity extends Activity {
 	private static final int ACTION_TAKE_PHOTO_B = 1;
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 	private static int RESULT_LOAD_IMAGE = 2;  //action code for Gallery Intent
-		
+	private AlarmManager mAlarmManager;
+	private Intent mNotificationReceiverIntent;
+	private PendingIntent mNotificationReceiverPendingIntent;
+	private static final long INITIAL_ALARM_DELAY = 2 * 60 * 1000L;
+	
 	/*
 	 *  DISPATCH INTENT TO TAKE PICTURE
 	 */
@@ -164,15 +171,18 @@ public class MainActivity extends Activity {
 		}
 
 	}	
-	
-	private void handleSmallCameraPhoto(Intent intent) {
-		
-		Log.i(TAG, "entered handleSmallCameraPhoto()");	
-		Bundle extras = intent.getExtras();
-		mImageBitmap = (Bitmap) extras.get("data");
-		mImageView.setImageBitmap(mImageBitmap);
-		mImageView.setVisibility(View.VISIBLE);
-	}
+
+//  If using this method, create another case in dispatchTakePictureIntent	
+//     and another action_code
+//	
+//	private void handleSmallCameraPhoto(Intent intent) {
+//		
+//		Log.i(TAG, "entered handleSmallCameraPhoto()");	
+//		Bundle extras = intent.getExtras();
+//		mImageBitmap = (Bitmap) extras.get("data");
+//		mImageView.setImageBitmap(mImageBitmap);
+//		mImageView.setVisibility(View.VISIBLE);
+//	}
 		
 	
 	/*
@@ -257,6 +267,24 @@ public class MainActivity extends Activity {
 				startActivityForResult(i, RESULT_LOAD_IMAGE);
 			}
 		});
+        
+        // Get the AlarmManager Service
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        // Create an Intent to broadcast to the AlarmNotificationReceiver
+        mNotificationReceiverIntent = new Intent(MainActivity.this,
+        		AlarmNotificationReceiver.class);
+
+        // Create an PendingIntent that holds the NotificationReceiverIntent
+        mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
+        		MainActivity.this, 0, mNotificationReceiverIntent, 0);
+
+        // Set repeating alarm
+        mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
+        		SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
+        		INITIAL_ALARM_DELAY,
+        		mNotificationReceiverPendingIntent);
+
 	}
 
 	
