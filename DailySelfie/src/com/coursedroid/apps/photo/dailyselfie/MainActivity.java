@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 
@@ -253,7 +254,7 @@ public class MainActivity extends Activity {
 	
 		
 		// button to View Selfies using Intent to Android Gallery app
-		Button buttonLoadImages = (Button) findViewById(R.id.buttonLoadPictures);
+		ImageButton buttonLoadImages = (ImageButton) findViewById(R.id.imageButton1);
         buttonLoadImages.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -341,3 +342,25 @@ public class MainActivity extends Activity {
 	}
 	
 }
+
+/*
+ * 	Previously used to display camera icon in 
+	Option Menu main.xml icon attribute:
+	
+ 	@android:drawable/ic_menu_camera
+ 	
+ */
+
+/*
+ * Old button
+ * 
+  		<Button
+        android:id="@+id/buttonLoadPictures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="21dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/btnText" />
+*/

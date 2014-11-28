@@ -2,7 +2,8 @@
     android:id="@string/buttonLoadPictures"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#000000" >
 
     <ImageView
         android:id="@+id/imageView1"
@@ -11,14 +12,14 @@
         android:contentDescription="@string/imageViewString"
         android:visibility="visible" />
 
-    <Button
-        android:id="@+id/buttonLoadPictures"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="21dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="@string/btnText" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:src="@drawable/album_icon" 
+        android:contentDescription="@string/btnText" />
 
 </RelativeLayout>
