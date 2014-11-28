@@ -70,17 +70,6 @@ public class MainActivity extends Activity {
 		startActivityForResult(takePictureIntent, actionCode);
 		Log.i(TAG, "Exiting dispatchTakePictureIntent()");
 	}	
-		
-	
-	// Setup button listener to take picture
-	Button.OnClickListener mTakePicOnClickListener = 
-			new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Log.i(TAG, "onClick dispatchTakePictureIntent");
-			dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
-		}
-	};
 	
 	// this method makes the photo available to "photo gallery"
 	private void galleryAddPic() {
