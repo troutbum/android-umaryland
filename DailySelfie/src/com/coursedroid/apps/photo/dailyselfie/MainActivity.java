@@ -257,16 +257,6 @@ public class MainActivity extends Activity {
 				startActivityForResult(i, RESULT_LOAD_IMAGE);
 			}
 		});
-		
-		
-		// take picture button launches intent
-//		Button picBtn = (Button) findViewById(R.id.btnIntend);
-//		setBtnListenerOrDisable( 
-//				picBtn, 
-//				mTakePicOnClickListener,
-//				MediaStore.ACTION_IMAGE_CAPTURE
-//				);
-
 	}
 
 	
@@ -315,41 +305,6 @@ public class MainActivity extends Activity {
 					PackageManager.MATCH_DEFAULT_ONLY);
 		return list.size() > 0;
 	}
-
-	private void setBtnListenerOrDisable( 
-			Button btn, 
-			Button.OnClickListener onClickListener,
-			String intentName
-	) {
-		if (isIntentAvailable(this, intentName)) {
-			btn.setOnClickListener(onClickListener);        	
-		} else {
-			btn.setText( 
-				getText(R.string.cannot).toString() + " " + btn.getText());
-			btn.setClickable(false);
-		}
-	}
 	
 }
 
-/*
- * 	Previously used to display camera icon in 
-	Option Menu main.xml icon attribute:
-	
- 	@android:drawable/ic_menu_camera
- 	
- */
-
-/*
- * Old button
- * 
-  		<Button
-        android:id="@+id/buttonLoadPictures"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="21dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="@string/btnText" />
-*/
