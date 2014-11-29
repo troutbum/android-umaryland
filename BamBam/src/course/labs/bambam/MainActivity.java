@@ -15,6 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
 	private final static int SINGLE = 1;
 	private final static int STILL = 2;
 	private static int speedMode = RANDOM;
+	public MediaPlayer mp;
 
 	private static final String TAG = "Lab-Graphics";
 
@@ -41,7 +43,10 @@ public class MainActivity extends Activity {
 	private RelativeLayout mFrame;
 
 	// Bubble image's bitmap
-	private Bitmap mBitmap;
+	private Bitmap mBitmap1;  // bam
+	private Bitmap mBitmap2;  // pebbles
+	
+	private boolean boyCat = true;
 
 	// Display dimensions
 	private int mDisplayWidth, mDisplayHeight;
@@ -71,7 +76,12 @@ public class MainActivity extends Activity {
 		mFrame = (RelativeLayout) findViewById(R.id.frame);
 
 		// Load basic bubble Bitmap
-		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bam384);
+		mBitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.bam384);
+		mBitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.pebbles384);
+		
+		// Play some music
+		mp = MediaPlayer.create(MainActivity.this, R.raw.iwantyouback);
+		mp.start();
 
 		// Greeting
 		Log.i (TAG,"Issuing Toast Message");		
@@ -118,6 +128,9 @@ public class MainActivity extends Activity {
 		//mSoundID = mSoundPool.load(this, R.raw.bubble_pop, 1);	
 		mSoundID = mSoundPool.load(this, R.raw.meow, 1);	
 
+		// resume music
+		mp.start();
+		
 	}
 
 	@Override
@@ -243,8 +256,21 @@ public class MainActivity extends Activity {
 		mAudioManager.setSpeakerphoneOn(false);
 		mAudioManager.unloadSoundEffects();	
 
+		mp.pause();  // pause music
+		
 		super.onPause();
 	}
+	
+	@Override
+	protected void onDestroy() {
+
+		mp.stop();  // stop music
+		mp.release();
+		
+		super.onDestroy();
+	}
+	
+	
 
 	// BubbleView is a View that displays a bubble.
 	// This class handles animating, drawing, and popping amongst other actions.
@@ -355,8 +381,18 @@ public class MainActivity extends Activity {
 			}
 
 			// TODO - create the scaled bitmap using size set above
-			mScaledBitmap = Bitmap.createScaledBitmap(mBitmap,
-					mScaledBitmapWidth, mScaledBitmapWidth, false);
+			// alternate between the two cat images
+			
+			if (boyCat == true) {
+				mScaledBitmap = Bitmap.createScaledBitmap(mBitmap1,
+						mScaledBitmapWidth, mScaledBitmapWidth, false);
+				boyCat = false;
+			}
+			else {
+				mScaledBitmap = Bitmap.createScaledBitmap(mBitmap2,
+						mScaledBitmapWidth, mScaledBitmapWidth, false);
+				boyCat = true;
+			}
 
 		}
 
