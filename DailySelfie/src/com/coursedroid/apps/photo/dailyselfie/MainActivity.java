@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 	private AlarmManager mAlarmManager;
 	private Intent mNotificationReceiverIntent;
 	private PendingIntent mNotificationReceiverPendingIntent;
-	private static final long INITIAL_ALARM_DELAY = 2 * 60 * 1000L;
+	private static final long INITIAL_ALARM_DELAY = 24 * 60 * 60 * 1000L;  // alarm set to daily
 	
 	/*
 	 *  DISPATCH INTENT TO TAKE PICTURE
@@ -267,7 +267,8 @@ public class MainActivity extends Activity {
 				startActivityForResult(i, RESULT_LOAD_IMAGE);
 			}
 		});
-        
+  
+           
         // Get the AlarmManager Service
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -284,6 +285,7 @@ public class MainActivity extends Activity {
         		SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
         		INITIAL_ALARM_DELAY,
         		mNotificationReceiverPendingIntent);
+        				
 
 	}
 
